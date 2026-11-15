@@ -1,0 +1,12 @@
+---
+config:
+  theme: neutral
+  look: classic
+---
+flowchart LR
+  cfg[YAML 配置] --> lab[MotrixLab / FastSAC]
+  lab -->|动作| sim[MotrixSim]
+  sim -->|状态| lab
+  lab -->|保存| weights[模型、配置与日志]
+  weights -->|加载| replay[策略回放]
+  replay --> sim

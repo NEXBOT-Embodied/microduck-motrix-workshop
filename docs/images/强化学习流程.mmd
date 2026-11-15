@@ -1,0 +1,20 @@
+---
+config:
+  theme: neutral
+  look: classic
+---
+flowchart TB
+  subgraph sampling[环境采样]
+    actor[Actor 策略网络] -->|关节目标偏移| env[MotrixSim 仿真环境与任务]
+    env -->|下一观测| actor
+    env -->|观测、动作、奖励、下一观测、终止标记| buffer[经验池]
+  end
+  subgraph learning[参数更新]
+    critic[Critic 更新：学习回报分布]
+    update[Actor 更新：价值评价与探索]
+    critic -->|价值评价| update
+  end
+  buffer -->|批量样本| critic
+  buffer -->|采样观测| update
+  update -.更新策略参数.-> actor
+  %% 为教学展示省略目标网络等细节。

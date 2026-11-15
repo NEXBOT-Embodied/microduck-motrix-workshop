@@ -2,15 +2,17 @@
 
 用 MotrixLab 训练 MicroDuck，在 MotrixSim 中观察行走。第一版提供两份教学模型、带中文注释的行走配置，以及修改参数、训练、回放和录制的统一入口。
 
-## 图文教程
+## 教学资料
 
-[打开课堂讲义](docs/课堂讲义.md)：13 幅配图，按检查环境、播放小鸭子、修改 YAML、训练、回放和保存的顺序操作。也可以先看 [20 秒短训练回放](docs/media/本次短训练回放.mp4)。
+[教学方案与技术说明](docs/课堂讲义.md)包含教学安排、强化学习基础、平台分工、工程运行、参数实验与结果分析，配有 13 幅技术图示和真实仿真画面。人员分工、课前准备及待落实事项见[教学实施与保障方案](docs/教学实施与保障方案.md)。
+
+实际运行记录：[20 秒短训练回放](docs/media/本次短训练回放.mp4)。
 
 <img src="docs/images/04_行走观察对照.png" alt="小鸭子行走观察对照" width="640">
 
-## 先看它怎么走
+## 环境检查与策略回放
 
-在工程根目录打开 PowerShell。环境已在课前准备好的电脑，逐条执行：
+在已完成课前环境准备的电脑上，从工程根目录打开 PowerShell，依次执行：
 
 ```powershell
 .\tools\lesson.cmd check --brief
@@ -18,15 +20,15 @@
 .\tools\lesson.cmd play --case straight
 ```
 
-播放完一个案例，关闭仿真窗口，再运行下一个。`drift` 是走偏示例；`straight` 是直行候选，也是课堂续训的起点。
+完成当前案例回放并关闭仿真窗口后，再执行下一条命令。`drift` 是走偏示例；`straight` 是直行候选，也是课堂续训的起始模型。
 
-## 改一个参数，再训练
+## 奖励参数对照实验
 
 ```powershell
 notepad .\configs\walking_constraints.yaml
 ```
 
-找到 `task.rewards.penalty_heading_rate.weight`。先保留 `-20.0` 完成 A 组，再改为 `-25.0` 完成 B 组，其余参数保持相同。每组都逐条执行：
+修改字段为 `task.rewards.penalty_heading_rate.weight`。A 组保留 `-20.0`，B 组改为 `-25.0`，其余参数保持一致。每组依次执行：
 
 ```powershell
 .\tools\lesson.cmd train --steps 256 --constraints configs/walking_constraints.yaml --dry-run
@@ -35,22 +37,22 @@ notepad .\configs\walking_constraints.yaml
 .\tools\lesson.cmd play-trained --latest --record --seconds 20
 ```
 
-第一条核对参数，第二条训练，第三条回放，第四条保存视频。`256` 表示新增的并行采样循环数，用于先跑通流程。A 组完成后先保存结果，再改参数做 B 组；新结果在 `outputs/training_outputs/local_tutorial/`。
+上述命令依次完成参数核对、训练、回放及视频保存。`256` 表示新增的并行采样循环数，用于验证操作流程。A 组完成并保存结果后，再执行 B 组实验。训练结果位于 `outputs/training_outputs/local_tutorial/`。
 
-## 代码在哪里
+## 工程结构与核心算法
 
-| 想看什么 | 文件或目录 |
+| 功能 | 文件或目录 |
 | --- | --- |
 | 全部行走约束与中文注释 | `configs/walking_constraints.yaml` |
-| YAML 怎样进入任务 | `src/microduck_course/constraints.py` |
-| 教学任务与转向扣分 | `src/microduck_course/task.py`、`heading_rewards.py` |
+| YAML 加载与任务配置 | `src/microduck_course/constraints.py` |
+| 教学任务与航向变化率惩罚 | `src/microduck_course/task.py`、`heading_rewards.py` |
 | 训练和回放适配 | `src/microduck_course/runtime.py` |
 | FastSAC 的 Actor、Critic 与经验池 | `upstream/MotrixLab/motrix_rl_builtin/src/motrix_rl_builtin/fastsac/` |
 | MicroDuck 的 MJCF、URDF、网格与关节表 | `models/microduck/` |
 | 两份课堂模型及对应配置 | `policies/source_runs/` |
 | 契约检查 | `checks/` |
 
-## 课前准备环境
+## 课前环境准备
 
 需要 Windows、Git for Windows 和 NVIDIA CUDA 运行条件。仓库不包含 Python 虚拟环境。固定版上游提供安装入口，在工程根目录运行：
 
