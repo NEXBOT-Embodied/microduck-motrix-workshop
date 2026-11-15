@@ -7,6 +7,7 @@
 - 在 `configs/walking_constraints.yaml` 中集中调整行走约束，附中文注释。
 - 保留固定版 MotrixLab、原生 MJCF、派生 URDF、40 个真实 STL 和第三方许可。
 - 发布配置使用相对路径，不依赖教师电脑原来的训练目录。
+- 新增 13 幅配图的课堂讲义，以及一次短训练结果的 20 秒真实回放。
 
 本版通过 22 项契约检查、环境与模型核对、256 次新增采样循环的训练预览。两份 checkpoint 与原始训练结果的字节一致，公开配置的路径变更与哈希记录在 `policies/publication_manifest.json`。
 
