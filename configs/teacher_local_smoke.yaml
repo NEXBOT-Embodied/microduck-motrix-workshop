@@ -1,0 +1,43 @@
+# 本机真实运行冒烟测试；不代表课堂资源配额或稳定行走。
+course:
+  title: 上海张江谋先飞 12 月 6 日小鸭子教学
+  task: microduck-course-flat
+  base_task: microduck-walk-flat
+  simulator: motrixsim
+  algorithm: motrix.fastsac
+  upstream_commit: 1ddb9743c220c3a1e234ea0237d5ce9cc56d0499
+  upstream_path: upstream/MotrixLab
+runtime:
+  seed: 42
+  num_envs: 32
+  play_num_envs: 1
+  additional_iterations: 200
+  device: cuda
+  cpu_threads: 4
+  logging_interval: 20
+  checkpoint_interval: 50
+  capacity_status: teacher_local_smoke_not_cloud_capacity
+fastsac:
+  asynchronous: false
+  agent:
+    compile: false
+    amp: false
+    buffer_size: 256
+    batch_size: 256
+    num_updates: 1
+evaluation:
+  preset: forward_walk_trial
+  command:
+  - 0.15
+  - 0.0
+  - 0.0
+  seed: 42
+  status: unverified_trial_not_walking_acceptance
+paths:
+  policies: configs/policies.yaml
+  outputs: outputs/training_outputs
+  submissions: submissions
+acceptance:
+  walking_policy_status: not_yet_trained
+  image_status: preparation_only
+  sim2sim_status: second_engine_not_selected

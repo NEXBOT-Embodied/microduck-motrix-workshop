@@ -1,0 +1,18 @@
+{
+  "source_version": "2026-11-16 course package v1",
+  "checkpoint_bytes_unchanged": true,
+  "course_config_changes": [
+    {
+      "path": "policies/source_runs/teacher_forward_pilot/20261108T151558Z-45791b71/course_config.json",
+      "archived_config_sha256": "ed2afa0a88659d6e769f83c6bbd3d7d48e15065c69889ffadb84680d67120255",
+      "published_config_sha256": "5afc39e14e500b80397936a7caaaa3f805854d76aec9bea3fc5800836ea44707",
+      "change": "Replace machine output location with repository-relative paths"
+    },
+    {
+      "path": "policies/source_runs/teacher_heading_continue28/20261109T085225Z-e8b51aba/course_config.json",
+      "archived_config_sha256": "742283a65310051babdd4e99b0028fff695600d8b6e9ac1b680a044d56946e3a",
+      "published_config_sha256": "cf706f4cbf96702c38ae02083a5c0252d69b6f20c6766a78d90d5903d0abfcf2",
+      "change": "Replace machine output location with repository-relative paths"
+    }
+  ]
+}

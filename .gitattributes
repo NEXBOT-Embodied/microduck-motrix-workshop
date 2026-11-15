@@ -1,0 +1,2 @@
+# Preserve the exact source/checkpoint bytes used by integrity checks.
+* -text -filter

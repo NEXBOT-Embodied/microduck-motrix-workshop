@@ -1,0 +1,770 @@
+{
+  "source_commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+  "links": 15,
+  "joints": 14,
+  "geometries": [
+    {
+      "link": "trunk_base",
+      "source_name": "trunk_collision",
+      "source_class": "collision",
+      "source_type": "capsule",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "trunk_collision_cylinder",
+        "trunk_collision_sphere_a",
+        "trunk_collision_sphere_b"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_01"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_02"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_03"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_04"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_05"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_06"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "self_collision_only",
+      "source_type": "mesh",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "trunk_base_collision_07"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_08"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_09"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_10"
+      ]
+    },
+    {
+      "link": "trunk_base",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "trunk_base_visual_11"
+      ]
+    },
+    {
+      "link": "yaw2roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw2roll_visual_00"
+      ]
+    },
+    {
+      "link": "yaw2roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw2roll_visual_01"
+      ]
+    },
+    {
+      "link": "yaw2roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw2roll_visual_02"
+      ]
+    },
+    {
+      "link": "yaw2roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw2roll_visual_03"
+      ]
+    },
+    {
+      "link": "hip_l",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "hip_l_visual_00"
+      ]
+    },
+    {
+      "link": "hip_l",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "hip_l_visual_01"
+      ]
+    },
+    {
+      "link": "upper_leg_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_left_visual_00"
+      ]
+    },
+    {
+      "link": "upper_leg_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_left_visual_01"
+      ]
+    },
+    {
+      "link": "upper_leg_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_left_visual_02"
+      ]
+    },
+    {
+      "link": "upper_leg_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_left_visual_03"
+      ]
+    },
+    {
+      "link": "upper_leg_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_left_visual_04"
+      ]
+    },
+    {
+      "link": "leg",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "leg_visual_00"
+      ]
+    },
+    {
+      "link": "leg",
+      "source_name": null,
+      "source_class": "self_collision_only",
+      "source_type": "mesh",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "leg_collision_01"
+      ]
+    },
+    {
+      "link": "leg",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "leg_visual_02"
+      ]
+    },
+    {
+      "link": "ankle_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_left_visual_00"
+      ]
+    },
+    {
+      "link": "ankle_left",
+      "source_name": "left_foot_collision",
+      "source_class": "collision",
+      "source_type": "mesh",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "left_foot_collision"
+      ]
+    },
+    {
+      "link": "ankle_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_left_visual_02"
+      ]
+    },
+    {
+      "link": "ankle_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_left_visual_03"
+      ]
+    },
+    {
+      "link": "ankle_left",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_left_visual_04"
+      ]
+    },
+    {
+      "link": "neck",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_visual_00"
+      ]
+    },
+    {
+      "link": "neck",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_visual_01"
+      ]
+    },
+    {
+      "link": "neck",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_visual_02"
+      ]
+    },
+    {
+      "link": "neck",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_visual_03"
+      ]
+    },
+    {
+      "link": "neck_pitch",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_pitch_visual_00"
+      ]
+    },
+    {
+      "link": "neck_pitch",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "neck_pitch_visual_01"
+      ]
+    },
+    {
+      "link": "yaw_roll_motion",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw_roll_motion_visual_00"
+      ]
+    },
+    {
+      "link": "yaw_roll_motion",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw_roll_motion_visual_01"
+      ]
+    },
+    {
+      "link": "yaw_roll_motion",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw_roll_motion_visual_02"
+      ]
+    },
+    {
+      "link": "yaw_roll_motion",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "yaw_roll_motion_visual_03"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_00"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_01"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_02"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_03"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_04"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_05"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_06"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_07"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_08"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_09"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_10"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_11"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_12"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_13"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_14"
+      ]
+    },
+    {
+      "link": "jaw_soft",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "jaw_soft_visual_15"
+      ]
+    },
+    {
+      "link": "bearing_roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "bearing_roll_visual_00"
+      ]
+    },
+    {
+      "link": "bearing_roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "bearing_roll_visual_01"
+      ]
+    },
+    {
+      "link": "bearing_roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "bearing_roll_visual_02"
+      ]
+    },
+    {
+      "link": "bearing_roll",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "bearing_roll_visual_03"
+      ]
+    },
+    {
+      "link": "hip_l_2",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "hip_l_2_visual_00"
+      ]
+    },
+    {
+      "link": "hip_l_2",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "hip_l_2_visual_01"
+      ]
+    },
+    {
+      "link": "upper_leg_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_right_visual_00"
+      ]
+    },
+    {
+      "link": "upper_leg_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_right_visual_01"
+      ]
+    },
+    {
+      "link": "upper_leg_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_right_visual_02"
+      ]
+    },
+    {
+      "link": "upper_leg_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_right_visual_03"
+      ]
+    },
+    {
+      "link": "upper_leg_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "upper_leg_right_visual_04"
+      ]
+    },
+    {
+      "link": "leg_2",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "leg_2_visual_00"
+      ]
+    },
+    {
+      "link": "leg_2",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "leg_2_visual_01"
+      ]
+    },
+    {
+      "link": "leg_2",
+      "source_name": null,
+      "source_class": "self_collision_only",
+      "source_type": "mesh",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "leg_2_collision_02"
+      ]
+    },
+    {
+      "link": "ankle_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_right_visual_00"
+      ]
+    },
+    {
+      "link": "ankle_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_right_visual_01"
+      ]
+    },
+    {
+      "link": "ankle_right",
+      "source_name": "right_foot_collision",
+      "source_class": "collision",
+      "source_type": "mesh",
+      "urdf_kind": "collision",
+      "urdf_names": [
+        "right_foot_collision"
+      ]
+    },
+    {
+      "link": "ankle_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_right_visual_03"
+      ]
+    },
+    {
+      "link": "ankle_right",
+      "source_name": null,
+      "source_class": "visual",
+      "source_type": "mesh",
+      "urdf_kind": "visual",
+      "urdf_names": [
+        "ankle_right_visual_04"
+      ]
+    }
+  ],
+  "export_velocity_rad_s": 20.0
+}

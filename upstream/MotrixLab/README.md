@@ -1,0 +1,230 @@
+**Language**: [English](README.md) | [简体中文](README.zh-CN.md)
+
+<div align="center">
+
+# MotrixLab
+
+[![GitHub License](https://img.shields.io/github/license/Motphys/MotrixLab)](LICENSE)
+![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)
+[![Release](https://img.shields.io/github/v/release/Motphys/MotrixLab?include_prereleases)](https://github.com/Motphys/MotrixLab/releases)
+[![Docs](https://img.shields.io/badge/docs-readthedocs-blue)](https://motrixlab.readthedocs.io)
+
+**Train robot policies in simulation, then deploy them to real hardware.**
+
+<img src="docs/source/_static/images/microduck-walk.gif" alt="Microduck robots walking in MotrixRender after training with MotrixLab" width="720">
+
+_Microduck locomotion policies trained with MotrixLab, rendered in MotrixRender — [watch the HD video](https://github.com/user-attachments/assets/4bcf3122-f135-44cb-a966-d2d8e84479da)._
+
+**📖 Documentation**: [简体中文](https://motrixlab.readthedocs.io/zh-cn/stable/) | [English](https://motrixlab.readthedocs.io/en/stable/)
+
+</div>
+
+## Contents
+
+- [What is MotrixLab?](#what-is-motrixlab)
+- [Key Features](#key-features)
+- [Quick Start](#-quick-start)
+- [Task Environments](#-task-environments)
+- [Built-in Robot Models](#-built-in-robot-models)
+- [What's Inside](#-whats-inside)
+- [Contributing](#-contributing)
+- [Contact](#-contact)
+
+## What is MotrixLab?
+
+**MotrixLab** is an open-source reinforcement learning framework for robot training, built on the high-performance [MotrixSim](https://github.com/Motphys/motrixsim-docs) physics engine. Define an environment once, train it with thousands of parallel environment instances using SKRL, RSL-RL, or the built-in FastSAC, and deploy the resulting policy to MuJoCo, native MotrixSim, or Unitree hardware — all through a single command-line interface.
+
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/source/_static/images/architecture-dark.svg">
+    <img src="docs/source/_static/images/architecture-light.svg" alt="MotrixLab architecture: define an environment once, train it with SKRL, RSL-RL or FastSAC on thousands of parallel MotrixSim environments running on NVIDIA CUDA or AMD ROCm GPUs, then deploy the same policy artifact to MuJoCo or Unitree hardware" width="100%">
+  </picture>
+</div>
+
+## Key Features
+
+- **Unified Interface**: Provides a concise and unified reinforcement learning training and evaluation interface
+- **Multi-framework Support**: Supports SKRL (JAX/PyTorch), RSLRL (PyTorch), and the built-in FastSAC implementation
+- **Rich Environments**: Includes various robot simulation environments such as basic control, locomotion, and manipulation tasks
+- **Sim-to-Real Deployment**: The same policy code deploys via the deploy CLI — simulation deployment to MuJoCo or native MotrixSim, hardware deployment to Unitree Go2
+- **High-precision, High-performance Simulation**: Built on [MotrixSim](https://motrixsim.readthedocs.io/), a high-precision, high-performance physics engine
+- **Visual Training**: Supports real-time rendering and training process visualization
+
+## 🚀 Quick Start
+
+Choose how you want to use MotrixLab:
+
+- **Run built-in tasks or contribute to the framework**: follow the repository quick start below. See the [repository installation guide](https://motrixlab.readthedocs.io/en/latest/user_guide/getting_started/installation.html#installation-repository) for full setup and development options.
+- **Use MotrixLab in your own project**: add `motrixlab` as a dependency with pip or uv. See [project dependency installation](https://motrixlab.readthedocs.io/en/latest/user_guide/getting_started/installation.html#installation-own-project) for commands, prerequisites, and GPU configuration. This path does not include repository tasks or robot assets.
+
+The following steps run a built-in task from the repository root.
+
+### Prerequisites
+
+| Requirement | Notes |
+| --- | --- |
+| Python **3.10–3.13** | Default: 3.10 |
+| [uv](https://docs.astral.sh/uv/) | Python project and dependency manager — [installation guide](https://docs.astral.sh/uv/getting-started/installation/) |
+| [Git LFS](https://git-lfs.com) | Robot meshes, motion data, and videos are tracked by LFS |
+| OS | Linux x86_64 or Windows x86_64; the JAX training backend is Linux-only |
+| GPU | NVIDIA (CUDA) or AMD (ROCm) — the matching wheels are selected automatically by `sh install.sh` |
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Motphys/MotrixLab
+cd MotrixLab
+git lfs pull
+```
+
+### 2. Install dependencies
+
+Linux (Python 3.10 by default):
+
+```bash
+sh install.sh
+# Python 3.11–3.13 for simulation/training without the Unitree hardware plugin (3.13 shown):
+sh install.sh --python 3.13
+```
+
+Unitree hardware deployment and `--all` require Python 3.10; simulation/training with Unitree robot models can use Python 3.11–3.13.
+
+Windows (PowerShell):
+
+```powershell
+.\install.ps1
+# if blocked by the execution policy:
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+This auto-detects your GPU vendor (NVIDIA → CUDA, AMD → ROCm) and installs the runtime workspace packages with the matching PyTorch wheels, required SKRL Torch, and built-in FastSAC. Use `--gpu cuda|rocm` to override detection; `--rslrl` adds RSL-RL, while `--skrl-jax` adds the optional Linux-only SKRL JAX backend. `--skrl-torch` remains accepted as a compatibility flag because SKRL Torch is already required. Flags combine; see `sh install.sh --help`.
+
+The root development environment installs `motrixlab` by default, providing the `mxlab` CLI.
+
+### 3. Train your first policy
+
+Activate the installed environment (Windows PowerShell: `.venv\Scripts\Activate.ps1`):
+
+```bash
+source .venv/bin/activate
+mxlab train task=microduck-walk-flat/motrix.fastsac play=true
+```
+
+While training, the built-in dashboard shows live run progress, episode statistics, throughput, rewards, and system health:
+
+<p align="center">
+  <img src="docs/source/_static/images/train-console.png" alt="MotrixLab training dashboard for the microduck-walk-flat fastsac task" width="720">
+</p>
+
+Training runs thousands of parallel environment instances; when it finishes, the trained policy is loaded and played in the viewer automatically. Checkpoints and TensorBoard logs are saved under `runs/microduck-walk-flat/`; watch the curves with:
+
+```bash
+tensorboard --logdir runs/microduck-walk-flat
+```
+
+Training finishes in minutes: mean return and episode length typically converge after about 4,000 iterations:
+
+<p align="center">
+  <img src="docs/source/_static/images/microduck-training-curves.png" alt="TensorBoard curves of a microduck-walk-flat training run: mean return and episode length converge after about 4,000 iterations" width="720">
+</p>
+
+### 4. Replay the trained policy
+
+Replay the latest trained policy without retraining (for example, after stopping training early with Ctrl+C):
+
+```bash
+mxlab play env=microduck-walk-flat
+```
+
+A trained microduck policy replayed in the viewer:
+
+https://github.com/user-attachments/assets/4bcf3122-f135-44cb-a966-d2d8e84479da
+
+## 🌍 Task Environments
+
+MotrixLab ships 50+ built-in simulation environments spanning basic control, quadruped and humanoid locomotion, whole-body motion tracking, and manipulation. The main categories:
+
+| Preview | Category | Example environments |
+| --- | --- | --- |
+| <img src="docs/source/_static/images/poster/go2-walk-rough.jpg" alt="go2-walk-rough" width="240"> | Quadruped velocity tracking | `go2-walk-flat` · `go2-walk-rough` · `go1-walk-rough` · `anymalc-walk-flat` |
+| <img src="docs/source/_static/images/poster/g1-walk-flat.jpg" alt="g1-walk-flat" width="240"> | Humanoid velocity tracking | `g1-walk-flat` · `k1-walk-rough` · `dex-evt-walk-flat` · `microduck-walk-flat` |
+| <img src="docs/source/_static/images/poster/g1-wbt-dance.jpg" alt="g1-wbt-dance" width="240"> | Whole-body tracking (WBT) | `g1-wbt-dance` · `k1-wbt-freekick` · `g1-29dof-wbt-largebox` |
+
+```bash
+mxlab view env=go2-walk-rough
+```
+
+See the [full environment gallery](https://motrixlab.readthedocs.io/en/latest/user_guide/envs/index.html) for all registered environments and their supported training algorithms.
+
+## 🤖 Built-in Robot Models
+
+Seven reusable robot models are registered out of the box and can be combined into any scene or task:
+
+| Screenshot | Registry name | Type | DoF |
+| --- | --- | --- | --- |
+| <img src="docs/source/_static/images/robots/anymal_c.png" alt="anymal_c" width="180"> | `anymal_c` | Quadruped | 12 |
+| <img src="docs/source/_static/images/robots/dex-evt.png" alt="dex-evt" width="180"> | `dex-evt` | Humanoid | 23 |
+| <img src="docs/source/_static/images/robots/g1-29dof.png" alt="g1-29dof" width="180"> | `g1-29dof` | Humanoid | 29 |
+| <img src="docs/source/_static/images/robots/go1.png" alt="go1" width="180"> | `go1` | Quadruped | 12 |
+| <img src="docs/source/_static/images/robots/go2.png" alt="go2" width="180"> | `go2` | Quadruped | 12 |
+| <img src="docs/source/_static/images/robots/k1.png" alt="k1" width="180"> | `k1` | Humanoid | 22 |
+| <img src="docs/source/_static/images/robots/microduck.png" alt="microduck" width="180"> | `microduck` | Humanoid | 14 |
+
+```bash
+mxlab view robot=go2
+```
+
+Use the public configuration API to compose a model directly:
+
+```python
+from motrix_robots import Microduck, UnitreeGo2Robot
+
+microduck = Microduck()
+go2 = UnitreeGo2Robot()
+```
+
+See [Supported Robots](https://motrixlab.readthedocs.io/en/latest/user_guide/robots.html) for configuration details and how to add your own model.
+
+## 🏗️ What's Inside
+
+MotrixLab is a [uv](https://docs.astral.sh/uv/) workspace with the following packages:
+
+| Package | PyPI name | Description |
+| --- | --- | --- |
+| **motrixlab** | `motrixlab` | Application integration with the unified `mxlab` CLI and environment/robot visualization |
+| **motrix_deploy** | `motrix-deploy` | Artifacts, control sessions, runtime contracts, and deployment CLI |
+| **motrix_deploy_mujoco** | `motrix-deploy-mujoco` | MuJoCo deployment backend plugin |
+| **motrix_deploy_motrixsim** | `motrix-deploy-motrixsim` | Native MotrixSim deployment backend plugin |
+| **motrix_deploy_unitree** | `motrix-deploy-unitree` | Asset-free Unitree hardware configuration, sensor/actuation wiring, and SDK2 DDS backend plugin |
+| **motrix_deploy_tasks** | `motrix-deploy-tasks` | Walking tasks, deployment scenes, and installed Hydra recipes |
+| **motrix_env_core** | `motrix-env-core` | Backend-agnostic environment framework, configuration, registry, and rendering |
+| **motrix_env_motrixsim** | `motrix-env-motrixsim` | Live MotrixSim backend, renderer, and Torch frontend |
+| **motrix_env_mujoco** | `motrix-env-mujoco` | Compile-only MuJoCo scene backend |
+| **motrix_robots** | `motrix-robots` | Reusable robot configurations, default poses, and model assets |
+| **motrix_envs** | `motrix-envs` | Built-in environments, task assets, data, and deployment-profile compilers |
+| **motrix_rl** | `motrix-rl` | RL control plane, provider/trainer contracts, run/checkpoint handling, and discovery |
+| **motrix_rl_builtin** | `motrix-rl-builtin` | Built-in Motrix FastSAC provider |
+| **motrix_rl_skrl** | `motrix-rl-skrl` | Required SKRL PPO Torch provider; optional JAX extra |
+| **motrix_rl_rslrl** | `motrix-rl-rslrl` | Optional RSL-RL PPO Torch provider |
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for the development environment setup, branch and commit conventions, and the configured checks (`prek`, `ruff`, `dprint`, `mypy`).
+
+## 📬 Contact
+
+Have questions or suggestions? Feel free to contact us through:
+
+- GitHub Issues: [Submit Issues](https://github.com/Motphys/MotrixLab/issues)
+- Discussions: [Join Discussion](https://github.com/Motphys/MotrixLab/discussions)
+
+## Project policies
+
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Support](SUPPORT.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
+- [Changelog](CHANGELOG.md)
+- [Citation metadata](CITATION.cff)
+- [License](LICENSE)

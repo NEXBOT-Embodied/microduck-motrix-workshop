@@ -1,0 +1,55 @@
+teacher_task_profile: forward_heading_rate_mid_v1
+course:
+  title: 上海张江谋先飞 12 月 6 日小鸭子教学
+  task: microduck-course-flat
+  base_task: microduck-walk-flat
+  simulator: motrixsim
+  algorithm: motrix.fastsac
+  upstream_commit: 1ddb9743c220c3a1e234ea0237d5ce9cc56d0499
+  upstream_path: upstream/MotrixLab
+runtime:
+  seed: 42
+  num_envs: 512
+  play_num_envs: 1
+  additional_iterations: 4000
+  device: cuda
+  cpu_threads: 4
+  logging_interval: 200
+  checkpoint_interval: 1000
+  capacity_status: teacher_local_pretraining_not_student_quota
+fastsac:
+  asynchronous: false
+  agent:
+    compile: false
+    amp: false
+    buffer_size: 1024
+    batch_size: 2048
+    num_updates: 1
+    learning_starts: 64
+evaluation:
+  preset: forward_walk_trial
+  command:
+  - 0.15
+  - 0.0
+  - 0.0
+  seed: 42
+  status: unverified_trial_not_walking_acceptance
+paths:
+  policies: configs/policies.yaml
+  outputs: outputs/training_outputs
+  submissions: submissions
+acceptance:
+  walking_policy_status: teacher_straight_trial_not_yet_evaluated
+  image_status: preparation_only
+  sim2sim_status: second_engine_not_selected
+training_visualization:
+  enabled: true
+  record: true
+  render_every_steps: 10
+  record_fps: 15
+  width: 960
+  height: 540
+  record_every_iterations: 1000
+  clip_iterations: 250
+  max_recorded_frames: 1500
+  startup_hold_seconds: 20

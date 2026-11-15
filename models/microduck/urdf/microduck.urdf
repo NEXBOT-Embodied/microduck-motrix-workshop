@@ -1,0 +1,876 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="microduck">
+  <!--Generated from pinned MotrixLab MJCF. See CONVERSION_REPORT.md for losses.-->
+  <mujoco>
+    <compiler meshdir="../mjcf/assets" strippath="true" discardvisual="false" fusestatic="false" />
+  </mujoco>
+  <material name="seeed_bearing__configuration__22x16x4_material">
+    <color rgba="0.811765 0.858824 0.898039 1" />
+  </material>
+  <material name="right_shell_material">
+    <color rgba="0.85098 0.85098 0.839216 1" />
+  </material>
+  <material name="banana_pcb_locker_material">
+    <color rgba="0.647059 0.647059 0.647059 1" />
+  </material>
+  <material name="trunk_base_material">
+    <color rgba="0.129412 0.152941 0.129412 1" />
+  </material>
+  <material name="xl330_material">
+    <color rgba="0.286275 0.286275 0.286275 1" />
+  </material>
+  <material name="power_support_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="np_f970_material">
+    <color rgba="0.301961 0.301961 0.301961 1" />
+  </material>
+  <material name="left_shell_material">
+    <color rgba="0.8 0.8 0.8 1" />
+  </material>
+  <material name="yaw2roll_material">
+    <color rgba="0.129412 0.152941 0.129412 1" />
+  </material>
+  <material name="bearing_roll_material">
+    <color rgba="0.129412 0.152941 0.129412 1" />
+  </material>
+  <material name="hip_l_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="upper_leg_left_material">
+    <color rgba="0.85098 0.85098 0.839216 1" />
+  </material>
+  <material name="upper_leg_rigidity_plate_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="leg_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="sole_left_material">
+    <color rgba="0.956863 0.686275 0.137255 1" />
+  </material>
+  <material name="foot_left_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <material name="seeed_bearing__configuration_default_material">
+    <color rgba="0.811765 0.858824 0.898039 1" />
+  </material>
+  <material name="ankle_left_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <material name="neck_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="neck_pitch_material">
+    <color rgba="0.34902 0.376471 0.4 1" />
+  </material>
+  <material name="yaw_roll_motion_material">
+    <color rgba="0.129412 0.152941 0.129412 1" />
+  </material>
+  <material name="lens_material">
+    <color rgba="0.262745 0.282353 0.301961 1" />
+  </material>
+  <material name="face_part_material">
+    <color rgba="0.67451 0.639216 0.603922 1" />
+  </material>
+  <material name="jaw_soft_material">
+    <color rgba="0.85098 0.756863 0.866667 1" />
+  </material>
+  <material name="motor_support_material">
+    <color rgba="0.129412 0.152941 0.129412 1" />
+  </material>
+  <material name="top_head_shell_material">
+    <color rgba="0.85098 0.85098 0.839216 1" />
+  </material>
+  <material name="elec_rpi_robot_hat_pcb_material">
+    <color rgba="0.313725 0.486275 0.411765 1" />
+  </material>
+  <material name="soft_mouth_top_material">
+    <color rgba="0.85098 0.756863 0.866667 1" />
+  </material>
+  <material name="noenoeil_material">
+    <color rgba="0.956863 0.686275 0.137255 1" />
+  </material>
+  <material name="jaw_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <material name="bottom_head_shell_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <material name="m12_lens_holder_material">
+    <color rgba="0.262745 0.282353 0.301961 1" />
+  </material>
+  <material name="pcb__raspberry_pi_zero_2_w_material">
+    <color rgba="0.498039 0.498039 0.498039 1" />
+  </material>
+  <material name="speaker_material">
+    <color rgba="0.294118 0.290196 0.290196 1" />
+  </material>
+  <material name="upper_leg_right_material">
+    <color rgba="0.85098 0.85098 0.839216 1" />
+  </material>
+  <material name="ankle_right_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <material name="sole_right_material">
+    <color rgba="0.956863 0.686275 0.137255 1" />
+  </material>
+  <material name="foot_right_material">
+    <color rgba="1 0.403922 0.121569 1" />
+  </material>
+  <link name="trunk_base">
+    <inertial>
+      <origin xyz="-0.0226332 -2.70828e-05 0.00280064" rpy="0 0 0" />
+      <mass value="0.199224" />
+      <inertia ixx="0.000123975" iyy="0.000145931" izz="0.000115351" ixy="7.1651e-08" ixz="-2.06915e-05" iyz="1.32429e-07" />
+    </inertial>
+    <collision name="trunk_collision_cylinder">
+      <origin xyz="0 0 0" rpy="0 0.6435011087932847 0" />
+      <geometry>
+        <cylinder radius="0.015" length="0.05" />
+      </geometry>
+    </collision>
+    <collision name="trunk_collision_sphere_a">
+      <origin xyz="-0.015 0 -0.02" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.015" />
+      </geometry>
+    </collision>
+    <collision name="trunk_collision_sphere_b">
+      <origin xyz="0.015 0 0.02" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.015" />
+      </geometry>
+    </collision>
+    <visual name="trunk_base_visual_01">
+      <origin xyz="0.006 0.0175 -0.005" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="trunk_base_visual_02">
+      <origin xyz="0.004 -0.0005 -0.0175" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/right_shell.stl" scale="1 1 1" />
+      </geometry>
+      <material name="right_shell_material" />
+    </visual>
+    <visual name="trunk_base_visual_03">
+      <origin xyz="0.0042 0 -0.0175215" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/banana_pcb_locker.stl" scale="1 1 1" />
+      </geometry>
+      <material name="banana_pcb_locker_material" />
+    </visual>
+    <visual name="trunk_base_visual_04">
+      <origin xyz="0.004 -0 -0.0175" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/trunk_base.stl" scale="1 1 1" />
+      </geometry>
+      <material name="trunk_base_material" />
+    </visual>
+    <visual name="trunk_base_visual_05">
+      <origin xyz="0.006 0.0175 0.0115" rpy="-3.141592653589793 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="trunk_base_visual_06">
+      <origin xyz="0.004 -0 -0.0175215" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/power_support.stl" scale="1 1 1" />
+      </geometry>
+      <material name="power_support_material" />
+    </visual>
+    <collision name="trunk_base_collision_07">
+      <origin xyz="0.004 -0 -0.0175215" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/power_support.stl" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="trunk_base_visual_08">
+      <origin xyz="-0.0359693 0 -0.00385049" rpy="3.124139371470964 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/np_f970.stl" scale="1 1 1" />
+      </geometry>
+      <material name="np_f970_material" />
+    </visual>
+    <visual name="trunk_base_visual_09">
+      <origin xyz="0.006 -0.0175 0.0115" rpy="-3.141592653589793 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="trunk_base_visual_10">
+      <origin xyz="0.004 -0 -0.0175785" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/left_shell.stl" scale="1 1 1" />
+      </geometry>
+      <material name="left_shell_material" />
+    </visual>
+    <visual name="trunk_base_visual_11">
+      <origin xyz="0.006 -0.0175 -0.005" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+  </link>
+  <link name="yaw2roll">
+    <inertial>
+      <origin xyz="-8.800000000000001e-11 0.0009941399999999999 0.0168917" rpy="0 0 0" />
+      <mass value="0.0230406" />
+      <inertia ixx="4.1964e-06" iyy="3.41752e-06" izz="2.3265e-06" ixy="-0" ixz="-0" iyz="-5.0881e-08" />
+    </inertial>
+    <visual name="yaw2roll_visual_00">
+      <origin xyz="-0.0175 -0.002 0.0125" rpy="3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/yaw2roll.stl" scale="1 1 1" />
+      </geometry>
+      <material name="yaw2roll_material" />
+    </visual>
+    <visual name="yaw2roll_visual_01">
+      <origin xyz="-0 -0 0.0125" rpy="-3.141592653589793 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="yaw2roll_visual_02">
+      <origin xyz="-0 0.0165 0.0125" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="yaw2roll_visual_03">
+      <origin xyz="-0.0175 -0.002 0.0125" rpy="-3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/bearing_roll.stl" scale="1 1 1" />
+      </geometry>
+      <material name="bearing_roll_material" />
+    </visual>
+  </link>
+  <joint name="left_hip_yaw" type="revolute">
+    <parent link="trunk_base" />
+    <child link="yaw2roll" />
+    <origin xyz="0.006 0.0175 -0.005" rpy="-3.141592653589793 0 1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.4363323129985824" upper="0.5235987755982988" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="hip_l">
+    <inertial>
+      <origin xyz="0.014815 1.6179e-08 -0.008299920000000001" rpy="0 0 0" />
+      <mass value="0.00618934" />
+      <inertia ixx="8.60626e-07" iyy="1.15753e-06" izz="6.51588e-07" ixy="1e-12" ixz="3.89882e-07" iyz="-1e-12" />
+    </inertial>
+    <visual name="hip_l_visual_00">
+      <origin xyz="0.021 0 -0.0185" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="hip_l_visual_01">
+      <origin xyz="-0.0175 0 -0.0185" rpy="-1.570796326794897 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/hip_l.stl" scale="1 1 1" />
+      </geometry>
+      <material name="hip_l_material" />
+    </visual>
+  </link>
+  <joint name="left_hip_roll" type="revolute">
+    <parent link="yaw2roll" />
+    <child link="hip_l" />
+    <origin xyz="0 0.0165 0.0125" rpy="-1.570796326794897 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.3839724354386992" upper="0.38397243543880577" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="upper_leg_left">
+    <inertial>
+      <origin xyz="0.006766 0.0228838 0.0134531" rpy="0 0 0" />
+      <mass value="0.0482067" />
+      <inertia ixx="1.68753e-05" iyy="1.03691e-05" izz="1.98269e-05" ixy="-4.41852e-06" ixz="2.27982e-07" iyz="3.89298e-07" />
+    </inertial>
+    <visual name="upper_leg_left_visual_00">
+      <origin xyz="-0 -0 -0.0425" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/upper_leg_left.stl" scale="1 1 1" />
+      </geometry>
+      <material name="upper_leg_left_material" />
+    </visual>
+    <visual name="upper_leg_left_visual_01">
+      <origin xyz="0.022 0.0357771 0.0125" rpy="3.141592653589793 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="upper_leg_left_visual_02">
+      <origin xyz="0 0 -0.0425" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/upper_leg_rigidity_plate.stl" scale="1 1 1" />
+      </geometry>
+      <material name="upper_leg_rigidity_plate_material" />
+    </visual>
+    <visual name="upper_leg_left_visual_03">
+      <origin xyz="0.022 0.0357771 -0.004" rpy="0 0 3.141592653589793" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="upper_leg_left_visual_04">
+      <origin xyz="0 -0 0.0125" rpy="1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+  </link>
+  <joint name="left_hip_pitch" type="revolute">
+    <parent link="hip_l" />
+    <child link="upper_leg_left" />
+    <origin xyz="0.025 0 -0.0185" rpy="-1.570796326794897 0 -1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.570796326794949" upper="1.5707963267948442" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="leg">
+    <inertial>
+      <origin xyz="-1.52e-10 0.0318937 -0.00953505" rpy="0 0 0" />
+      <mass value="0.0215844" />
+      <inertia ixx="5.25056e-06" iyy="2.15507e-06" izz="4.33925e-06" ixy="-1e-12" ixz="0" iyz="7.65005e-07" />
+    </inertial>
+    <visual name="leg_visual_00">
+      <origin xyz="-0.022 0.0357771 0.0385" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/leg.stl" scale="1 1 1" />
+      </geometry>
+      <material name="leg_material" />
+    </visual>
+    <collision name="leg_collision_01">
+      <origin xyz="-0.022 0.0357771 0.0385" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/leg.stl" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="leg_visual_02">
+      <origin xyz="-0 0.042 -0.0115" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+  </link>
+  <joint name="left_knee" type="revolute">
+    <parent link="upper_leg_left" />
+    <child link="leg" />
+    <origin xyz="0.022 0.0357771 -0.004" rpy="3.141592653589793 0 1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267948983" upper="1.5707963267948948" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="ankle_left">
+    <inertial>
+      <origin xyz="-0.00615742 -0.0137483 -0.0156585" rpy="0 0 0" />
+      <mass value="0.0300246" />
+      <inertia ixx="5.91525e-06" iyy="1.11534e-05" izz="7.74016e-06" ixy="-2.05354e-07" ixz="8.218e-08" iyz="5.6722e-08" />
+    </inertial>
+    <visual name="ankle_left_visual_00">
+      <origin xyz="-0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/sole_left.stl" scale="1 1 1" />
+      </geometry>
+      <material name="sole_left_material" />
+    </visual>
+    <collision name="left_foot_collision">
+      <origin xyz="-0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/sole_left_collision.stl" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="ankle_left_visual_02">
+      <origin xyz="-0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/foot_left.stl" scale="1 1 1" />
+      </geometry>
+      <material name="foot_left_material" />
+    </visual>
+    <visual name="ankle_left_visual_03">
+      <origin xyz="0 0 -0.0322" rpy="0 0 3.141592653589793" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration_default.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration_default_material" />
+    </visual>
+    <visual name="ankle_left_visual_04">
+      <origin xyz="-0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/ankle_left.stl" scale="1 1 1" />
+      </geometry>
+      <material name="ankle_left_material" />
+    </visual>
+  </link>
+  <joint name="left_ankle" type="revolute">
+    <parent link="leg" />
+    <child link="ankle_left" />
+    <origin xyz="-0 0.042 -0.026" rpy="-3.141592653589793 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267949063" upper="1.5707963267948868" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="neck">
+    <inertial>
+      <origin xyz="-0 -0.025 0.0141665" rpy="0 0 0" />
+      <mass value="0.0368414" />
+      <inertia ixx="1.72925e-05" iyy="3.12694e-06" izz="1.63707e-05" ixy="-0" ixz="0" iyz="-0" />
+    </inertial>
+    <visual name="neck_visual_00">
+      <origin xyz="0.022 0.05 0.028" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/neck.stl" scale="1 1 1" />
+      </geometry>
+      <material name="neck_material" />
+    </visual>
+    <visual name="neck_visual_01">
+      <origin xyz="0 0 0.0145" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="neck_visual_02">
+      <origin xyz="-0 -0.05 0.0145" rpy="1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="neck_visual_03">
+      <origin xyz="0.022 0.05 0.003" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/neck.stl" scale="1 1 1" />
+      </geometry>
+      <material name="neck_material" />
+    </visual>
+  </link>
+  <joint name="neck_pitch" type="revolute">
+    <parent link="trunk_base" />
+    <child link="neck" />
+    <origin xyz="0.026 0.0145 0.0324215" rpy="-1.570796326794897 0 -3.141592653589793" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267948974" upper="1.0471975511965967" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="neck_pitch">
+    <inertial>
+      <origin xyz="-6.533e-09 0.0116641 -0.0145" rpy="0 0 0" />
+      <mass value="0.00572" />
+      <inertia ixx="1.09186e-06" iyy="9.66855e-07" izz="5.12111e-07" ixy="0" ixz="0" iyz="0" />
+    </inertial>
+    <visual name="neck_pitch_visual_00">
+      <origin xyz="-0 0.0287931 -0.0145" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/neck_pitch.stl" scale="1 1 1" />
+      </geometry>
+      <material name="neck_pitch_material" />
+    </visual>
+    <visual name="neck_pitch_visual_01">
+      <origin xyz="-0 0.0207931 -0.0145" rpy="1.570796326794897 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+  </link>
+  <joint name="head_pitch" type="revolute">
+    <parent link="neck" />
+    <child link="neck_pitch" />
+    <origin xyz="-0 -0.05 0" rpy="3.141592653589793 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267948966" upper="1.5707963267948966" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="yaw_roll_motion">
+    <inertial>
+      <origin xyz="-0.000166657 -0.00500964 0.0178065" rpy="0 0 0" />
+      <mass value="0.0486" />
+      <inertia ixx="6.97903e-06" iyy="8.10293e-06" izz="9.57884e-06" ixy="3.21657e-07" ixz="-3.4797e-08" iyz="3.4295e-07" />
+    </inertial>
+    <visual name="yaw_roll_motion_visual_00">
+      <origin xyz="0 0 0.01" rpy="0 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/yaw_roll_motion.stl" scale="1 1 1" />
+      </geometry>
+      <material name="yaw_roll_motion_material" />
+    </visual>
+    <visual name="yaw_roll_motion_visual_01">
+      <origin xyz="0 0 0.0145" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="yaw_roll_motion_visual_02">
+      <origin xyz="-0.016 0 0.0145" rpy="-0 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="yaw_roll_motion_visual_03">
+      <origin xyz="0.018 0 0.0145" rpy="0 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+  </link>
+  <joint name="head_yaw" type="revolute">
+    <parent link="neck_pitch" />
+    <child link="yaw_roll_motion" />
+    <origin xyz="-0 0.0186931 -0.0145" rpy="1.570796326794897 0 -3.141592653589793" />
+    <axis xyz="0 0 1" />
+    <limit lower="-2.9670597283903613" upper="2.9670597283903595" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="jaw_soft">
+    <inertial>
+      <origin xyz="0.00460523 0.00120047 -0.0324761" rpy="0 0 0" />
+      <mass value="0.188766" />
+      <inertia ixx="0.000320811" iyy="0.0002541" izz="0.000149882" ixy="-6.32293e-07" ixz="6.57153e-06" iyz="4.18477e-06" />
+    </inertial>
+    <visual name="jaw_soft_visual_00">
+      <origin xyz="0.0155 -9.13778e-05 -0.05548" rpy="-1.570796326794897 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/lens.stl" scale="1 1 1" />
+      </geometry>
+      <material name="lens_material" />
+    </visual>
+    <visual name="jaw_soft_visual_01">
+      <origin xyz="-0.0045 -9.13778e-05 -0.0178" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/face_part.stl" scale="1 1 1" />
+      </geometry>
+      <material name="face_part_material" />
+    </visual>
+    <visual name="jaw_soft_visual_02">
+      <origin xyz="0.003 0.0255 -0.018" rpy="0 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="jaw_soft_visual_03">
+      <origin xyz="-0.0046 0 -0.0179996" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/jaw_soft.stl" scale="1 1 1" />
+      </geometry>
+      <material name="jaw_soft_material" />
+    </visual>
+    <visual name="jaw_soft_visual_04">
+      <origin xyz="-0.0045 -0 -0.018" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/motor_support.stl" scale="1 1 1" />
+      </geometry>
+      <material name="motor_support_material" />
+    </visual>
+    <visual name="jaw_soft_visual_05">
+      <origin xyz="-0.0045 -0 -0.018" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/top_head_shell.stl" scale="1 1 1" />
+      </geometry>
+      <material name="top_head_shell_material" />
+    </visual>
+    <visual name="jaw_soft_visual_06">
+      <origin xyz="0 0 0.0145" rpy="-1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="jaw_soft_visual_07">
+      <origin xyz="0.0032 -0.04 -0.018" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration_default.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration_default_material" />
+    </visual>
+    <visual name="jaw_soft_visual_08">
+      <origin xyz="0.02694 0.0289936 -0.0519" rpy="0 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/elec_rpi_robot_hat_pcb.stl" scale="1 1 1" />
+      </geometry>
+      <material name="elec_rpi_robot_hat_pcb_material" />
+    </visual>
+    <visual name="jaw_soft_visual_09">
+      <origin xyz="-0.00420071 1.7776e-08 -0.0180814" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/soft_mouth_top.stl" scale="1 1 1" />
+      </geometry>
+      <material name="soft_mouth_top_material" />
+    </visual>
+    <visual name="jaw_soft_visual_10">
+      <origin xyz="-0.0045 -9.13778e-05 -0.0178" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/noenoeil.stl" scale="1 1 1" />
+      </geometry>
+      <material name="noenoeil_material" />
+    </visual>
+    <visual name="jaw_soft_visual_11">
+      <origin xyz="-0.0045 -0 -0.018" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/jaw.stl" scale="1 1 1" />
+      </geometry>
+      <material name="jaw_material" />
+    </visual>
+    <visual name="jaw_soft_visual_12">
+      <origin xyz="-0.0043 -0 -0.018" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/bottom_head_shell.stl" scale="1 1 1" />
+      </geometry>
+      <material name="bottom_head_shell_material" />
+    </visual>
+    <visual name="jaw_soft_visual_13">
+      <origin xyz="0.0155 -9.13778e-05 -0.05558" rpy="-1.570796326794897 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/m12_lens_holder.stl" scale="1 1 1" />
+      </geometry>
+      <material name="m12_lens_holder_material" />
+    </visual>
+    <visual name="jaw_soft_visual_14">
+      <origin xyz="0.015435 -1.13778e-05 -0.06001" rpy="-1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/pcb__raspberry_pi_zero_2_w.stl" scale="1 1 1" />
+      </geometry>
+      <material name="pcb__raspberry_pi_zero_2_w_material" />
+    </visual>
+    <visual name="jaw_soft_visual_15">
+      <origin xyz="0.01 -0.016786 0.0260226" rpy="1.570796326794897 0 1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/speaker.stl" scale="1 1 1" />
+      </geometry>
+      <material name="speaker_material" />
+    </visual>
+  </link>
+  <joint name="head_roll" type="revolute">
+    <parent link="yaw_roll_motion" />
+    <child link="jaw_soft" />
+    <origin xyz="-0.0179 0 0.0145" rpy="0 -1.570796326794897 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.43633231299858327" upper="0.4363323129985815" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="bearing_roll">
+    <inertial>
+      <origin xyz="-8.800000000000001e-11 0.0009941399999999999 0.0168917" rpy="0 0 0" />
+      <mass value="0.0230406" />
+      <inertia ixx="4.1964e-06" iyy="3.41752e-06" izz="2.3265e-06" ixy="-0" ixz="-0" iyz="-5.0881e-08" />
+    </inertial>
+    <visual name="bearing_roll_visual_00">
+      <origin xyz="-0.0175 -0.002 0.0125" rpy="3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/yaw2roll.stl" scale="1 1 1" />
+      </geometry>
+      <material name="yaw2roll_material" />
+    </visual>
+    <visual name="bearing_roll_visual_01">
+      <origin xyz="-0 -0 0.0125" rpy="-3.141592653589793 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="bearing_roll_visual_02">
+      <origin xyz="-0.0175 -0.002 0.0125" rpy="3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/bearing_roll.stl" scale="1 1 1" />
+      </geometry>
+      <material name="bearing_roll_material" />
+    </visual>
+    <visual name="bearing_roll_visual_03">
+      <origin xyz="-0 0.0165 0.0125" rpy="1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+  </link>
+  <joint name="right_hip_yaw" type="revolute">
+    <parent link="trunk_base" />
+    <child link="bearing_roll" />
+    <origin xyz="0.006 -0.0175 -0.005" rpy="-3.141592653589793 0 1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.523598775598297" upper="0.43633231299858416" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="hip_l_2">
+    <inertial>
+      <origin xyz="0.014815 1.6212e-08 -0.008299920000000001" rpy="0 0 0" />
+      <mass value="0.00618934" />
+      <inertia ixx="8.60626e-07" iyy="1.15753e-06" izz="6.51588e-07" ixy="1e-12" ixz="3.89882e-07" iyz="-1e-12" />
+    </inertial>
+    <visual name="hip_l_2_visual_00">
+      <origin xyz="-0.0175 0 -0.0185" rpy="-1.570796326794897 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/hip_l.stl" scale="1 1 1" />
+      </geometry>
+      <material name="hip_l_material" />
+    </visual>
+    <visual name="hip_l_2_visual_01">
+      <origin xyz="0.025 0 -0.0185" rpy="1.570796326794897 0 -1.570796326794897" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+  </link>
+  <joint name="right_hip_roll" type="revolute">
+    <parent link="bearing_roll" />
+    <child link="hip_l_2" />
+    <origin xyz="-0 0.0165 0.0125" rpy="1.570796326794897 0 3.141592653589793" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.3839724354387507" upper="0.38397243543875426" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="upper_leg_right">
+    <inertial>
+      <origin xyz="-0.006766 0.0228838 0.0134531" rpy="0 0 0" />
+      <mass value="0.0482067" />
+      <inertia ixx="1.68753e-05" iyy="1.03691e-05" izz="1.98269e-05" ixy="4.41852e-06" ixz="-2.27982e-07" iyz="3.89298e-07" />
+    </inertial>
+    <visual name="upper_leg_right_visual_00">
+      <origin xyz="-0.022 0.0357771 0.0125" rpy="-0 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="upper_leg_right_visual_01">
+      <origin xyz="-0.022 0.0357771 0" rpy="3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration__22x16x4.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration__22x16x4_material" />
+    </visual>
+    <visual name="upper_leg_right_visual_02">
+      <origin xyz="-0 -0 0.0435" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/upper_leg_rigidity_plate.stl" scale="1 1 1" />
+      </geometry>
+      <material name="upper_leg_rigidity_plate_material" />
+    </visual>
+    <visual name="upper_leg_right_visual_03">
+      <origin xyz="-0 -0 -0.0425" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/upper_leg_right.stl" scale="1 1 1" />
+      </geometry>
+      <material name="upper_leg_right_material" />
+    </visual>
+    <visual name="upper_leg_right_visual_04">
+      <origin xyz="-0 -0 0.0125" rpy="1.570796326794897 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+  </link>
+  <joint name="right_hip_pitch" type="revolute">
+    <parent link="hip_l_2" />
+    <child link="upper_leg_right" />
+    <origin xyz="0.025 0 -0.0185" rpy="-1.570796326794897 0 -1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57079632679494" upper="1.570796326794853" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="leg_2">
+    <inertial>
+      <origin xyz="-0.0318937 -1.52e-10 -0.00953505" rpy="0 0 0" />
+      <mass value="0.0215844" />
+      <inertia ixx="2.15507e-06" iyy="5.25056e-06" izz="4.33925e-06" ixy="1e-12" ixz="-7.65005e-07" iyz="0" />
+    </inertial>
+    <visual name="leg_2_visual_00">
+      <origin xyz="-0.042 0 -0.0115" rpy="-0 -1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/xl330.stl" scale="1 1 1" />
+      </geometry>
+      <material name="xl330_material" />
+    </visual>
+    <visual name="leg_2_visual_01">
+      <origin xyz="-0.0357771 -0.022 0.0385" rpy="0 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/leg.stl" scale="1 1 1" />
+      </geometry>
+      <material name="leg_material" />
+    </visual>
+    <collision name="leg_2_collision_02">
+      <origin xyz="-0.0357771 -0.022 0.0385" rpy="0 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/leg.stl" scale="1 1 1" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_knee" type="revolute">
+    <parent link="upper_leg_right" />
+    <child link="leg_2" />
+    <origin xyz="-0.022 0.0357771 -0.004" rpy="3.141592653589793 0 0" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267949339" upper="1.5707963267948593" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+  <link name="ankle_right">
+    <inertial>
+      <origin xyz="0.00615539 -0.0137482 -0.0156566" rpy="0 0 0" />
+      <mass value="0.0300251" />
+      <inertia ixx="5.91534e-06" iyy="1.11534e-05" izz="7.74015e-06" ixy="2.04877e-07" ixz="-8.2467e-08" iyz="5.7017e-08" />
+    </inertial>
+    <visual name="ankle_right_visual_00">
+      <origin xyz="0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/ankle_right.stl" scale="1 1 1" />
+      </geometry>
+      <material name="ankle_right_material" />
+    </visual>
+    <visual name="ankle_right_visual_01">
+      <origin xyz="0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/sole_right.stl" scale="1 1 1" />
+      </geometry>
+      <material name="sole_right_material" />
+    </visual>
+    <collision name="right_foot_collision">
+      <origin xyz="0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/sole_right_collision.stl" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="ankle_right_visual_03">
+      <origin xyz="0 -0 -0.0292" rpy="-3.141592653589793 0 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/seeed_bearing__configuration_default.stl" scale="1 1 1" />
+      </geometry>
+      <material name="seeed_bearing__configuration_default_material" />
+    </visual>
+    <visual name="ankle_right_visual_04">
+      <origin xyz="0.022 0.00622291 -0.06469999999999999" rpy="-1.570796326794897 1.570796326794897 0" />
+      <geometry>
+        <mesh filename="../mjcf/assets/foot_right.stl" scale="1 1 1" />
+      </geometry>
+      <material name="foot_right_material" />
+    </visual>
+  </link>
+  <joint name="right_ankle" type="revolute">
+    <parent link="leg_2" />
+    <child link="ankle_right" />
+    <origin xyz="-0.042 0 -0.026" rpy="-3.141592653589793 0 1.570796326794897" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5707963267949028" upper="1.5707963267948903" effort="0.96" velocity="20.0" />
+    <dynamics damping="0.053" friction="0.0048" />
+  </joint>
+</robot>

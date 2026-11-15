@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "microduck-course"
+version = "0.1.0"
+description = "MicroDuck walking classroom adapter for the pinned MotrixLab FastSAC implementation"
+requires-python = ">=3.10,<3.14"
+dependencies = ["PyYAML==6.0.3"]
+
+[project.scripts]
+microduck-course = "microduck_course.cli:main"
+
+[project.entry-points."motrix_env_core.envs"]
+microduck_course = "microduck_course.task:register"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,608 @@
+{
+  "canonical_model": "MotrixLab MicroDuck",
+  "source_commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+  "source_model_path": "motrix_robots/src/motrix_robots/assets/microduck/microduck.xml",
+  "supplier_variant": "not selected",
+  "generated_urdf_is_not_native_training_model": true,
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "b4f4547312b8ff0735536fd491492e674b40e0efe17beda8e7037d385382b7ae",
+      "size": 40,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "CONVERSION_REPORT.md",
+      "sha256": "7b01b30a22bf4188ba2bf3fd91a3387111008a12afb496520284d50dfffb1f1d",
+      "size": 4975,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "joint_map.yaml",
+      "sha256": "97298f7b0abc82696a9844815b4c88d5a1f2f8d2278254dbfc38c25a1ca6f00b",
+      "size": 4677,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "licenses/ATTRIBUTION.md",
+      "sha256": "168431404849d1dbfde7370474f81c056ada0e7957b6736e28c7a41c22dd1a67",
+      "size": 1876,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "licenses/LICENSE-APACHE-2.0.txt",
+      "sha256": "c43ebf1e659952856ef049bec1222a19d2052ad327c594112ed5d7845cc84322",
+      "size": 10854,
+      "source_url": "https://raw.githubusercontent.com/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/LICENSE",
+      "unchanged_from_source": true,
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "license": "license-notice",
+      "fixed_remote_bytes_verified": true
+    },
+    {
+      "path": "licenses/POLLEN-LICENSE-MODELS.md",
+      "sha256": "51526767ce31785f88f318ede4870f4b0d466267c79ce6fb9009c682f798da30",
+      "size": 1148,
+      "source_url": "https://raw.githubusercontent.com/pollen-robotics/microduck_rl/bae39f5900b318f7e87fc485c30a31213cfa14eb/LICENSE-MODELS.md",
+      "unchanged_from_source": true,
+      "commit": "bae39f5900b318f7e87fc485c30a31213cfa14eb",
+      "license": "license-notice",
+      "fixed_remote_bytes_verified": true
+    },
+    {
+      "path": "mjcf/assets/ankle_left.stl",
+      "sha256": "2ec1bd89205b407efebaa9a8898ad9fea741389d87b80ecc5c96b21d1668119e",
+      "size": 248984,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/ankle_left.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "2ec1bd89205b407efebaa9a8898ad9fea741389d87b80ecc5c96b21d1668119e",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/ankle_right.stl",
+      "sha256": "f83f388ae00787415e76b8ecaab769f08f25b8c4e90c1937ff0fc4d68d81722e",
+      "size": 248884,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/ankle_right.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "f83f388ae00787415e76b8ecaab769f08f25b8c4e90c1937ff0fc4d68d81722e",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/banana_pcb_locker.stl",
+      "sha256": "42ddde9d01bf5d91f88b99847017f14d97d2537ee27383c6d41dd8bf30a51134",
+      "size": 69484,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/banana_pcb_locker.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "42ddde9d01bf5d91f88b99847017f14d97d2537ee27383c6d41dd8bf30a51134",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/bearing_roll.stl",
+      "sha256": "b5603a64b2d965ad75ea847767b5798130852e12a658fde7b5068fc457e2adcc",
+      "size": 121084,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/bearing_roll.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "b5603a64b2d965ad75ea847767b5798130852e12a658fde7b5068fc457e2adcc",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/bottom_head_shell.stl",
+      "sha256": "1820f7cf96646b0fc0c431f07da87b91b13111bfa9857ab1bf2b1fc3388f8da2",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/bottom_head_shell.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "1820f7cf96646b0fc0c431f07da87b91b13111bfa9857ab1bf2b1fc3388f8da2",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/elec_rpi_robot_hat_pcb.stl",
+      "sha256": "1a61582759d82b5b4df9b7d11099bf1bb3944fc77e6b74d3237adf24dd5d03d7",
+      "size": 942884,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/elec_rpi_robot_hat_pcb.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "1a61582759d82b5b4df9b7d11099bf1bb3944fc77e6b74d3237adf24dd5d03d7",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/face_part.stl",
+      "sha256": "d0e89a173e7bdc8038c4d413f458140d8f42f1a2f098f67a887c2388eff31718",
+      "size": 570684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/face_part.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "d0e89a173e7bdc8038c4d413f458140d8f42f1a2f098f67a887c2388eff31718",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/foot_left.stl",
+      "sha256": "a1f5d43456d0f522bd60870153795f1e8112c1adf9b8b4373b59608d9545c044",
+      "size": 996184,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/foot_left.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "a1f5d43456d0f522bd60870153795f1e8112c1adf9b8b4373b59608d9545c044",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/foot_right.stl",
+      "sha256": "54f97fa1f0e0e611d31329df9f3c3b17ffcca2d695c579d1d32cbe99e8a6c7ef",
+      "size": 997684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/foot_right.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "54f97fa1f0e0e611d31329df9f3c3b17ffcca2d695c579d1d32cbe99e8a6c7ef",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/hip_l.stl",
+      "sha256": "e175896932d76dc7648cf939aa39cb7b1d188b783d91745adb9a4cec65e9052c",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/hip_l.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "e175896932d76dc7648cf939aa39cb7b1d188b783d91745adb9a4cec65e9052c",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/jaw.stl",
+      "sha256": "45cdbd319a4583095d8daa0db07dee726522a743d59acb82d27d82ded500a1cf",
+      "size": 495984,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/jaw.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "45cdbd319a4583095d8daa0db07dee726522a743d59acb82d27d82ded500a1cf",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/jaw_soft.stl",
+      "sha256": "2d2ade4e86df4b37ce313bb9b96023109dd04bab39dba08b154e76d332fbce2e",
+      "size": 336384,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/jaw_soft.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "2d2ade4e86df4b37ce313bb9b96023109dd04bab39dba08b154e76d332fbce2e",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/left_shell.stl",
+      "sha256": "2abde8e2b79c9b011cdb11957c67ab4287b45d7301affd4235ab81141118e331",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/left_shell.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "2abde8e2b79c9b011cdb11957c67ab4287b45d7301affd4235ab81141118e331",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/leg.stl",
+      "sha256": "9a91cc1ae31ecd9e0c1ba93f3bb2ad8a12e29bff24ec27d1ac66c0c3037d9fcf",
+      "size": 738884,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/leg.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "9a91cc1ae31ecd9e0c1ba93f3bb2ad8a12e29bff24ec27d1ac66c0c3037d9fcf",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/lens.stl",
+      "sha256": "b1c717432ff7666398de58adec6a1b7e03a7e45aa155dbfe27a6152ef19663e5",
+      "size": 93684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/lens.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "b1c717432ff7666398de58adec6a1b7e03a7e45aa155dbfe27a6152ef19663e5",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/m12_lens_holder.stl",
+      "sha256": "031d5ffaf6247328cf6d020f6b6695ffb3f8d3f22cf923b85811351d89ecfd7c",
+      "size": 549684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/m12_lens_holder.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "031d5ffaf6247328cf6d020f6b6695ffb3f8d3f22cf923b85811351d89ecfd7c",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/motor_support.stl",
+      "sha256": "ce0aa5bef82c7474512d302568c341b9769b3005e0bdb91a19c2eaaba6dad480",
+      "size": 180884,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/motor_support.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "ce0aa5bef82c7474512d302568c341b9769b3005e0bdb91a19c2eaaba6dad480",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/neck.stl",
+      "sha256": "b6e86b886153be8a8a776c1cb219c074ee9e89c8bd431117662a2d9e504d7cb5",
+      "size": 73484,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/neck.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "b6e86b886153be8a8a776c1cb219c074ee9e89c8bd431117662a2d9e504d7cb5",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/neck_pitch.stl",
+      "sha256": "a685ce65348ae4d0d49417c69a7a8871f8bbd54a6e3419362be9c334abd5d2ae",
+      "size": 356084,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/neck_pitch.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "a685ce65348ae4d0d49417c69a7a8871f8bbd54a6e3419362be9c334abd5d2ae",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/noenoeil.stl",
+      "sha256": "e1167b3d5ad7fbbe6e63296bcd0c6b61556611e6bc1367b15ecfd27e3abb72f5",
+      "size": 49284,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/noenoeil.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "e1167b3d5ad7fbbe6e63296bcd0c6b61556611e6bc1367b15ecfd27e3abb72f5",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/np_f970.stl",
+      "sha256": "0e55a48281331b3b7b1a363d2e93b6012f37c52045b6dc922a149ca7c1b38388",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/np_f970.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "0e55a48281331b3b7b1a363d2e93b6012f37c52045b6dc922a149ca7c1b38388",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/pcb__raspberry_pi_zero_2_w.stl",
+      "sha256": "802cc66fc5447c67fc642d1339e55160df10f2ad04a65efd130e35fb7b2d3c90",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/pcb__raspberry_pi_zero_2_w.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "802cc66fc5447c67fc642d1339e55160df10f2ad04a65efd130e35fb7b2d3c90",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/power_support.stl",
+      "sha256": "ee45e397d3f3422f34940a4b61156c3c11c7e8c2b240451ce5f9ddd1622a130e",
+      "size": 641684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/power_support.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "ee45e397d3f3422f34940a4b61156c3c11c7e8c2b240451ce5f9ddd1622a130e",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/right_shell.stl",
+      "sha256": "3efba3e193cc6aa49d49a9c92cdded0504917397c9e2c5b8fe002a958e2f2d2b",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/right_shell.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "3efba3e193cc6aa49d49a9c92cdded0504917397c9e2c5b8fe002a958e2f2d2b",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/seeed_bearing__configuration__22x16x4.stl",
+      "sha256": "295ee68ed9766c91fe06d3a2a49d39f7c2f56cc943395d293afdeb013123435e",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/seeed_bearing__configuration__22x16x4.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "295ee68ed9766c91fe06d3a2a49d39f7c2f56cc943395d293afdeb013123435e",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/seeed_bearing__configuration_default.stl",
+      "sha256": "e815f3483a2e7b80844f3c0938a47e53db38b12faed9b2d364414c19e4322da4",
+      "size": 1048584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/seeed_bearing__configuration_default.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "e815f3483a2e7b80844f3c0938a47e53db38b12faed9b2d364414c19e4322da4",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/soft_mouth_top.stl",
+      "sha256": "3c2b52b0b6e2ce944a1e1b5a0838e1216be1ad3a34c8cdf91be186e634aec57b",
+      "size": 393584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/soft_mouth_top.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "3c2b52b0b6e2ce944a1e1b5a0838e1216be1ad3a34c8cdf91be186e634aec57b",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/sole_left.stl",
+      "sha256": "e028c8b09fecd4cb354d042bf7fd95a1a1bc2d524d760d62137fa8d74093fc23",
+      "size": 789484,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/sole_left.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "e028c8b09fecd4cb354d042bf7fd95a1a1bc2d524d760d62137fa8d74093fc23",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/sole_left_collision.stl",
+      "sha256": "e738aea0709dc326af796776ecb9d59e9f2976583f75798edd84f2e8df59e068",
+      "size": 19584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/sole_left_collision.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "e738aea0709dc326af796776ecb9d59e9f2976583f75798edd84f2e8df59e068",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/sole_right.stl",
+      "sha256": "3f5068872f3add10eb967327651445bdfca635f5a8a01befa0ef05e462b72b4c",
+      "size": 795184,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/sole_right.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "3f5068872f3add10eb967327651445bdfca635f5a8a01befa0ef05e462b72b4c",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/sole_right_collision.stl",
+      "sha256": "7180125825e394d5dabeedd50a8b43b4e0fa0585e7dd29ca632ff67acb36a6db",
+      "size": 12884,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/sole_right_collision.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "7180125825e394d5dabeedd50a8b43b4e0fa0585e7dd29ca632ff67acb36a6db",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/speaker.stl",
+      "sha256": "75a35f9bcf94cd8e52f99b3fd6ae667b48f52503f9075ee2f699eebe8e7b3ddf",
+      "size": 684,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/speaker.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "75a35f9bcf94cd8e52f99b3fd6ae667b48f52503f9075ee2f699eebe8e7b3ddf",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/top_head_shell.stl",
+      "sha256": "6d01f396f514c9d2185cf6b8250b1d8382ac3fa0702eb525bcb284f706196291",
+      "size": 806084,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/top_head_shell.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "6d01f396f514c9d2185cf6b8250b1d8382ac3fa0702eb525bcb284f706196291",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/trunk_base.stl",
+      "sha256": "aa4f853ae555a8b765e585ce4519c0bbff325ce298ec15a1437792c52a0beac1",
+      "size": 184984,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/trunk_base.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "aa4f853ae555a8b765e585ce4519c0bbff325ce298ec15a1437792c52a0beac1",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/upper_leg_left.stl",
+      "sha256": "8cb1c12dfa6d366a318bb1ec16f585427b9a185afeb7738d0a6f41f5db46a07d",
+      "size": 612584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/upper_leg_left.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "8cb1c12dfa6d366a318bb1ec16f585427b9a185afeb7738d0a6f41f5db46a07d",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/upper_leg_right.stl",
+      "sha256": "5caf996cc3e151b01f393cdc6a6a6a940c1d86179d8b7c7f5f85cf1f1ac2fb63",
+      "size": 612584,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/upper_leg_right.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "5caf996cc3e151b01f393cdc6a6a6a940c1d86179d8b7c7f5f85cf1f1ac2fb63",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/upper_leg_rigidity_plate.stl",
+      "sha256": "231b3e5f1e24d146d735dc158cbcfec0c95a0d0ca8c500f61f04d15d0b665652",
+      "size": 180084,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/upper_leg_rigidity_plate.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "231b3e5f1e24d146d735dc158cbcfec0c95a0d0ca8c500f61f04d15d0b665652",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/xl330.stl",
+      "sha256": "96238ed0d020ce0009cf1a5aa4b6926176c800840318ee65e4375be2298d2744",
+      "size": 206384,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/xl330.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "96238ed0d020ce0009cf1a5aa4b6926176c800840318ee65e4375be2298d2744",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/yaw2roll.stl",
+      "sha256": "6c8f193ec7cb40be0f48eeb5fba81bce2c87f12e1aab3f77f1bc4981386e1495",
+      "size": 620284,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/yaw2roll.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "6c8f193ec7cb40be0f48eeb5fba81bce2c87f12e1aab3f77f1bc4981386e1495",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/assets/yaw_roll_motion.stl",
+      "sha256": "b0c9902dee19f06cdb7fa930292e0e1c91e2dc59baa971211495b58ff76c3c60",
+      "size": 290784,
+      "origin": "MotrixLab fixed-commit Git LFS object",
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "source_url": "https://media.githubusercontent.com/media/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/assets/yaw_roll_motion.stl",
+      "license": "CC-BY-NC-SA-4.0",
+      "lfs_sha256": "b0c9902dee19f06cdb7fa930292e0e1c91e2dc59baa971211495b58ff76c3c60",
+      "unchanged_from_source": true
+    },
+    {
+      "path": "mjcf/microduck.xml",
+      "sha256": "a29ebff32be4216baf431412702226798dfae1f51293214adc2c74513eeb8dee",
+      "size": 32486,
+      "source_url": "https://raw.githubusercontent.com/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/microduck.xml",
+      "unchanged_from_source": true,
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "license": "Apache-2.0",
+      "fixed_remote_bytes_verified": true
+    },
+    {
+      "path": "mjcf/README.md",
+      "sha256": "e71a1fcdcbbebfd0d6efd6577456066f308e5f131c5b1602ee6dcbb0f5ccd99c",
+      "size": 969,
+      "source_url": "https://raw.githubusercontent.com/Motphys/MotrixLab/1ddb9743c220c3a1e234ea0237d5ce9cc56d0499/motrix_robots/src/motrix_robots/assets/microduck/README.md",
+      "unchanged_from_source": true,
+      "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+      "license": "Apache-2.0",
+      "fixed_remote_bytes_verified": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "40c6970e49e82b86ecfc1d20695a39d548501c1b4f567e8f66771a32f81c6cf4",
+      "size": 4699,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/build_manifest.py",
+      "sha256": "a7815942a979e4d1d51767741760140d27cd8a52f6c76e417c8fa225fbb6920e",
+      "size": 3555,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/conversion_details.json",
+      "sha256": "753922a2fe66cff94279e6b2822a101dd928771393af9cf14d2a1f17a7c35d8a",
+      "size": 17690,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/convert_mjcf_to_urdf.py",
+      "sha256": "6e5daae211cdad94279656d03c6fcddc1ae7769a7defbf893cd03b949def8691",
+      "size": 11091,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/fetch_assets.py",
+      "sha256": "3ed7760f4d340a743db2ec1a9bbe949fa232c134d0e102820385157535643768",
+      "size": 1209,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/lfs_fetch_manifest.json",
+      "sha256": "e42e95805e749758f9b46b3bfc73011e1e7705157f77a16e810c59b498830d2c",
+      "size": 18670,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/requirements-validation.txt",
+      "sha256": "8384fb248671191fe9abc93d96d80606d4c1c44e9d5f6c764d92beee1f465c06",
+      "size": 54,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/sync_upstream_assets.py",
+      "sha256": "a9cce4aff5188f0574ac657fe710893d8800095bfde4fc11bbb9f0dafb844c66",
+      "size": 2490,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/validate_model.py",
+      "sha256": "18efbfa6d09aa757c599a0d8d835cc40f65a5a915cf88c73014331bcc8e03a53",
+      "size": 11157,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "tools/validation_report.json",
+      "sha256": "5eed937b8df531ba0ba2846a9cad16e0e60c649bad4e37a86f4aff71e7ae2cac",
+      "size": 16981,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "urdf/microduck.urdf",
+      "sha256": "4a6539a2df0efba93d75be46714f8573c60bd540b2880bfc85a757979eda5b7e",
+      "size": 37487,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    },
+    {
+      "path": "validation_report.md",
+      "sha256": "0957cc6c8dc9743e42bf66ff3cc30fee0acad30f304a5ea5c688c860e1370244",
+      "size": 5960,
+      "origin": "generated teaching model package",
+      "license": "Apache-2.0"
+    }
+  ],
+  "asset_files": 40,
+  "asset_bytes": 21625760,
+  "excluded": [
+    "tools/.validation-venv",
+    "__pycache__",
+    "asset_manifest.json (self)"
+  ]
+}

@@ -1,0 +1,614 @@
+{
+  "scope": "resources, topology, inertial consistency, loading, static FK; no rollout/training",
+  "mujoco_version": "3.3.7",
+  "checks": {
+    "topology": {
+      "links": 15,
+      "hinges": 14,
+      "root": "trunk_base",
+      "ok": true
+    },
+    "resources": {
+      "ok": true,
+      "files": [
+        {
+          "path": "mjcf/assets/ankle_left.stl",
+          "faces": 4978,
+          "size": 248984,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/ankle_right.stl",
+          "faces": 4976,
+          "size": 248884,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/banana_pcb_locker.stl",
+          "faces": 1388,
+          "size": 69484,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/bearing_roll.stl",
+          "faces": 2420,
+          "size": 121084,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/bottom_head_shell.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/elec_rpi_robot_hat_pcb.stl",
+          "faces": 18856,
+          "size": 942884,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/face_part.stl",
+          "faces": 11412,
+          "size": 570684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/foot_left.stl",
+          "faces": 19922,
+          "size": 996184,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/foot_right.stl",
+          "faces": 19952,
+          "size": 997684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/hip_l.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/jaw.stl",
+          "faces": 9918,
+          "size": 495984,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/jaw_soft.stl",
+          "faces": 6726,
+          "size": 336384,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/left_shell.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/leg.stl",
+          "faces": 14776,
+          "size": 738884,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/lens.stl",
+          "faces": 1872,
+          "size": 93684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/m12_lens_holder.stl",
+          "faces": 10992,
+          "size": 549684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/motor_support.stl",
+          "faces": 3616,
+          "size": 180884,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/neck.stl",
+          "faces": 1468,
+          "size": 73484,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/neck_pitch.stl",
+          "faces": 7120,
+          "size": 356084,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/noenoeil.stl",
+          "faces": 984,
+          "size": 49284,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/np_f970.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/pcb__raspberry_pi_zero_2_w.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/power_support.stl",
+          "faces": 12832,
+          "size": 641684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/right_shell.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/seeed_bearing__configuration__22x16x4.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/seeed_bearing__configuration_default.stl",
+          "faces": 20970,
+          "size": 1048584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/soft_mouth_top.stl",
+          "faces": 7870,
+          "size": 393584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/sole_left.stl",
+          "faces": 15788,
+          "size": 789484,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/sole_left_collision.stl",
+          "faces": 390,
+          "size": 19584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/sole_right.stl",
+          "faces": 15902,
+          "size": 795184,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/sole_right_collision.stl",
+          "faces": 256,
+          "size": 12884,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/speaker.stl",
+          "faces": 12,
+          "size": 684,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/top_head_shell.stl",
+          "faces": 16120,
+          "size": 806084,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/trunk_base.stl",
+          "faces": 3698,
+          "size": 184984,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/upper_leg_left.stl",
+          "faces": 12250,
+          "size": 612584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/upper_leg_right.stl",
+          "faces": 12250,
+          "size": 612584,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/upper_leg_rigidity_plate.stl",
+          "faces": 3600,
+          "size": 180084,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/xl330.stl",
+          "faces": 4126,
+          "size": 206384,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/yaw2roll.stl",
+          "faces": 12404,
+          "size": 620284,
+          "ok": true
+        },
+        {
+          "path": "mjcf/assets/yaw_roll_motion.stl",
+          "faces": 5814,
+          "size": 290784,
+          "ok": true
+        }
+      ],
+      "total_bytes": 21625760
+    },
+    "source_inertia": {
+      "ok": true,
+      "links": [
+        {
+          "link": "trunk_base",
+          "mass_kg": 0.199224,
+          "inertia_eigenvalues_kg_m2": [
+            9.852651409383543e-05,
+            0.00014079887191245793,
+            0.00014593161399370649
+          ],
+          "ok": true
+        },
+        {
+          "link": "yaw2roll",
+          "mass_kg": 0.0230406,
+          "inertia_eigenvalues_kg_m2": [
+            2.3241322433233854e-06,
+            3.4198877566766147e-06,
+            4.1964e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "hip_l",
+          "mass_kg": 0.00618934,
+          "inertia_eigenvalues_kg_m2": [
+            3.5245839627768924e-07,
+            1.157529999987118e-06,
+            1.1597556037351934e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "upper_leg_left",
+          "mass_kg": 0.0482067,
+          "inertia_eigenvalues_kg_m2": [
+            8.117992081470838e-06,
+            1.910804196247167e-05,
+            1.98452659560575e-05
+          ],
+          "ok": true
+        },
+        {
+          "link": "leg",
+          "mass_kg": 0.0215844,
+          "inertia_eigenvalues_kg_m2": [
+            1.9137833772389263e-06,
+            4.580536622760666e-06,
+            5.250560000000408e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "ankle_left",
+          "mass_kg": 0.0300246,
+          "inertia_eigenvalues_kg_m2": [
+            5.90333840156386e-06,
+            7.743197719635796e-06,
+            1.116227387880035e-05
+          ],
+          "ok": true
+        },
+        {
+          "link": "neck",
+          "mass_kg": 0.0368414,
+          "inertia_eigenvalues_kg_m2": [
+            3.12694e-06,
+            1.63707e-05,
+            1.72925e-05
+          ],
+          "ok": true
+        },
+        {
+          "link": "neck_pitch",
+          "mass_kg": 0.00572,
+          "inertia_eigenvalues_kg_m2": [
+            5.12111e-07,
+            9.66855e-07,
+            1.09186e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "yaw_roll_motion",
+          "mass_kg": 0.0486,
+          "inertia_eigenvalues_kg_m2": [
+            6.887804907974077e-06,
+            8.11787739625905e-06,
+            9.65511769576687e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "jaw_soft",
+          "mass_kg": 0.188766,
+          "inertia_eigenvalues_kg_m2": [
+            0.00014946066480264227,
+            0.000254265736749713,
+            0.00032106659844764474
+          ],
+          "ok": true
+        },
+        {
+          "link": "bearing_roll",
+          "mass_kg": 0.0230406,
+          "inertia_eigenvalues_kg_m2": [
+            2.3241322433233854e-06,
+            3.4198877566766147e-06,
+            4.1964e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "hip_l_2",
+          "mass_kg": 0.00618934,
+          "inertia_eigenvalues_kg_m2": [
+            3.5245839627768924e-07,
+            1.157529999987118e-06,
+            1.1597556037351934e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "upper_leg_right",
+          "mass_kg": 0.0482067,
+          "inertia_eigenvalues_kg_m2": [
+            8.117992081470838e-06,
+            1.910804196247167e-05,
+            1.98452659560575e-05
+          ],
+          "ok": true
+        },
+        {
+          "link": "leg_2",
+          "mass_kg": 0.0215844,
+          "inertia_eigenvalues_kg_m2": [
+            1.9137833772389263e-06,
+            4.580536622760667e-06,
+            5.250560000000407e-06
+          ],
+          "ok": true
+        },
+        {
+          "link": "ankle_right",
+          "mass_kg": 0.0300251,
+          "inertia_eigenvalues_kg_m2": [
+            5.903438255781445e-06,
+            7.743205838473821e-06,
+            1.1162245905744725e-05
+          ],
+          "ok": true
+        }
+      ],
+      "total_mass_kg": 0.73724318
+    },
+    "loading": {
+      "ok": true,
+      "resource_loader": "Python file bytes + MuJoCo VFS (Unicode Windows path workaround)",
+      "native": {
+        "nbody_including_world": 16,
+        "nq": 21,
+        "nv": 20,
+        "joints_including_free": 15,
+        "actuators": 14,
+        "geoms": 76
+      },
+      "urdf": {
+        "nbody_including_world": 16,
+        "nq": 14,
+        "nv": 14,
+        "joints": 14,
+        "actuators": 0,
+        "geoms": 78
+      }
+    },
+    "compiled_inertia": {
+      "ok": true,
+      "links": [
+        {
+          "link": "trunk_base",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "yaw2roll",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "hip_l",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "upper_leg_left",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "leg",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "ankle_left",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "neck",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "neck_pitch",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "yaw_roll_motion",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "jaw_soft",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "bearing_roll",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "hip_l_2",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "upper_leg_right",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "leg_2",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        },
+        {
+          "link": "ankle_right",
+          "mass_error_kg": 0.0,
+          "com_error_m": 0.0,
+          "tensor_error_kg_m2": 0.0
+        }
+      ]
+    },
+    "forward_kinematics": {
+      "ok": true,
+      "poses": [
+        {
+          "pose": "zero",
+          "position_max_abs_m": 8.326672684688674e-17,
+          "rotation_matrix_max_abs": 1.0269562977782698e-15,
+          "independent_urdf_fk_max_abs": 1.1102230246251565e-15
+        },
+        {
+          "pose": "STAND",
+          "position_max_abs_m": 5.551115123125783e-17,
+          "rotation_matrix_max_abs": 1.2490009027033011e-15,
+          "independent_urdf_fk_max_abs": 1.27675647831893e-15
+        },
+        {
+          "pose": "random_in_range_00",
+          "position_max_abs_m": 1.1102230246251565e-16,
+          "rotation_matrix_max_abs": 1.0286910212542466e-15,
+          "independent_urdf_fk_max_abs": 1.0824674490095276e-15
+        },
+        {
+          "pose": "random_in_range_01",
+          "position_max_abs_m": 1.1102230246251565e-16,
+          "rotation_matrix_max_abs": 1.1761425167122752e-15,
+          "independent_urdf_fk_max_abs": 1.27675647831893e-15
+        },
+        {
+          "pose": "random_in_range_02",
+          "position_max_abs_m": 6.938893903907228e-17,
+          "rotation_matrix_max_abs": 1.1102230246251565e-15,
+          "independent_urdf_fk_max_abs": 1.5543122344752192e-15
+        },
+        {
+          "pose": "random_in_range_03",
+          "position_max_abs_m": 8.326672684688674e-17,
+          "rotation_matrix_max_abs": 1.3322676295501878e-15,
+          "independent_urdf_fk_max_abs": 1.2212453270876722e-15
+        },
+        {
+          "pose": "random_in_range_04",
+          "position_max_abs_m": 5.551115123125783e-17,
+          "rotation_matrix_max_abs": 8.881784197001252e-16,
+          "independent_urdf_fk_max_abs": 7.771561172376096e-16
+        },
+        {
+          "pose": "random_in_range_05",
+          "position_max_abs_m": 6.938893903907228e-17,
+          "rotation_matrix_max_abs": 1.3600232051658168e-15,
+          "independent_urdf_fk_max_abs": 1.0547118733938987e-15
+        },
+        {
+          "pose": "random_in_range_06",
+          "position_max_abs_m": 1.1102230246251565e-16,
+          "rotation_matrix_max_abs": 1.2212453270876722e-15,
+          "independent_urdf_fk_max_abs": 1.2212453270876722e-15
+        },
+        {
+          "pose": "random_in_range_07",
+          "position_max_abs_m": 5.551115123125783e-17,
+          "rotation_matrix_max_abs": 1.2212453270876722e-15,
+          "independent_urdf_fk_max_abs": 1.1102230246251565e-15
+        },
+        {
+          "pose": "random_in_range_08",
+          "position_max_abs_m": 1.1102230246251565e-16,
+          "rotation_matrix_max_abs": 1.2212453270876722e-15,
+          "independent_urdf_fk_max_abs": 1.2212453270876722e-15
+        },
+        {
+          "pose": "random_in_range_09",
+          "position_max_abs_m": 8.326672684688674e-17,
+          "rotation_matrix_max_abs": 1.0269562977782698e-15,
+          "independent_urdf_fk_max_abs": 9.298117831235686e-16
+        }
+      ],
+      "compares": "All 15 link frames: native MJCF vs compiled URDF and independent URDF FK; root aligned"
+    }
+  },
+  "status": "PASS",
+  "limitations": [
+    "No trained walking policy, reward, physics rollout or MotrixSim execution was tested.",
+    "URDF import has a fixed root and no actuators; contact masks, armature and actuator laws differ.",
+    "Capsule decomposes into 3 collision primitives; contact counts may differ.",
+    "URDF velocity field is an explicit export placeholder, not a measured motor limit."
+  ]
+}

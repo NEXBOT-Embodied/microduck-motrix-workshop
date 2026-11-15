@@ -1,0 +1,69 @@
+task:
+  env: microduck-course-flat
+  rllib: motrix
+  algo: fastsac
+  train_backend: torch
+num_envs: 512
+play_num_envs: 1
+seed: 42
+logging:
+  backend: tensorboard
+  interval: 200
+checkpoint:
+  interval: 1000
+algo:
+  device: cuda
+  agent:
+    actor_learning_rate: 0.0003
+    critic_learning_rate: 0.0003
+    alpha_learning_rate: 0.0003
+    weight_decay: 0.001
+    max_grad_norm: 0.0
+    actor_hidden_dim: 512
+    critic_hidden_dim: 768
+    num_q_networks: 2
+    use_layer_norm: true
+    use_tanh: true
+    log_std_max: 0.0
+    log_std_min: -5.0
+    num_atoms: 101
+    v_min: -20.0
+    v_max: 20.0
+    gamma: 0.97
+    tau: 0.125
+    alpha_init: 0.01
+    use_autotune: true
+    target_entropy_ratio: -0.1
+    buffer_size: 1024
+    num_steps: 1
+    batch_size: 2048
+    learning_starts: 64
+    policy_frequency: 4
+    num_updates: 1
+    obs_normalization: true
+    compile: false
+    amp: false
+    amp_dtype: bf16
+  trainer:
+    num_learning_iterations: 28000
+    async_options:
+      ring_capacity: 64
+      utd_mode: strict
+      weight_publish_interval: 4
+      weight_poll_interval: 1
+      max_ingest_per_iter: 8
+      idle_sleep_s: 0.0005
+      collector_inference_device: cuda
+      collector_compile: true
+      collector_amp: true
+      collector_amp_dtype: fp16
+      learner_cpu_cores: null
+      collector_cpu_cores: null
+      transition_ipc: auto
+      weight_ipc: auto
+      weight_ipc_min_bytes: 16777216
+      num_collectors: 1
+      cpus_per_collector: null
+      num_learners: 1
+      learner_devices: null
+  asynchronous: false

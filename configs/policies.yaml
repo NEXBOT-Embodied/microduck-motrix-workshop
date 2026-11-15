@@ -1,0 +1,18 @@
+# 只登记教师实际训练/验收过的可信权重；不要把空文件改为 ready。
+# run_dir 内必须包含 MotrixLab metadata.json、task_config.yaml 和 checkpoint。
+# checkpoint 可相对 run_dir；sha256 必须由真实文件计算。
+# 验收后填 status: ready、run_dir、checkpoint、sha256、verified_walking: true。
+reference:
+  status: missing
+  run_dir: null
+  checkpoint: null
+  sha256: null
+  verified_walking: false
+  note: 教师参考策略，尚无已验收的真实权重。
+starter:
+  status: missing
+  run_dir: null
+  checkpoint: null
+  sha256: null
+  verified_walking: false
+  note: 课堂续训起步状态，尚无已验收的真实权重；需包含优化器等续训状态。

@@ -1,0 +1,227 @@
+model: MotrixLab MicroDuck
+source_commit: 1ddb9743c220c3a1e234ea0237d5ce9cc56d0499
+units:
+  length: m
+  angle: rad
+  mass: kg
+  inertia: kg*m^2
+root_link: trunk_base
+root_is_free_in_native_mjcf: true
+native_root_initial_position_m:
+- 0.0
+- 0.0
+- 0.12
+feet:
+  left: ankle_left
+  right: ankle_right
+policy_joint_order:
+- left_hip_yaw
+- left_hip_roll
+- left_hip_pitch
+- left_knee
+- left_ankle
+- neck_pitch
+- head_pitch
+- head_yaw
+- head_roll
+- right_hip_yaw
+- right_hip_roll
+- right_hip_pitch
+- right_knee
+- right_ankle
+default_pose_name: STAND (MotrixLab default)
+default_pose_rad:
+- 0
+- -0.08726646259971647
+- -0.457924
+- -0.00494
+- 0.452984
+- 0.3490658503988659
+- 0.3490658503988659
+- 0
+- 0
+- 0
+- 0.08726646259971647
+- 0.457924
+- 0.00494
+- -0.452984
+urdf_velocity_export_field_rad_s: 20.0
+velocity_field_note: URDF format placeholder, NOT hardware specification; not used
+  by the course trainer.
+source_actuator:
+  type: position
+  kp: 0.55
+  kv: 0.0
+  force_range_nm:
+  - -0.96
+  - 0.96
+  armature_kg_m2: 0.0018
+joints:
+- name: left_hip_yaw
+  parent_link: trunk_base
+  child_link: yaw2roll
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -0.4363323129985824
+  upper_rad: 0.5235987755982988
+  effort_nm: 0.96
+  policy_index_zero_based: 0
+  default_rad: 0
+- name: left_hip_roll
+  parent_link: yaw2roll
+  child_link: hip_l
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -0.3839724354386992
+  upper_rad: 0.38397243543880577
+  effort_nm: 0.96
+  policy_index_zero_based: 1
+  default_rad: -0.08726646259971647
+- name: left_hip_pitch
+  parent_link: hip_l
+  child_link: upper_leg_left
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.570796326794949
+  upper_rad: 1.5707963267948442
+  effort_nm: 0.96
+  policy_index_zero_based: 2
+  default_rad: -0.457924
+- name: left_knee
+  parent_link: upper_leg_left
+  child_link: leg
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267948983
+  upper_rad: 1.5707963267948948
+  effort_nm: 0.96
+  policy_index_zero_based: 3
+  default_rad: -0.00494
+- name: left_ankle
+  parent_link: leg
+  child_link: ankle_left
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267949063
+  upper_rad: 1.5707963267948868
+  effort_nm: 0.96
+  policy_index_zero_based: 4
+  default_rad: 0.452984
+- name: neck_pitch
+  parent_link: trunk_base
+  child_link: neck
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267948974
+  upper_rad: 1.0471975511965967
+  effort_nm: 0.96
+  policy_index_zero_based: 5
+  default_rad: 0.3490658503988659
+- name: head_pitch
+  parent_link: neck
+  child_link: neck_pitch
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267948966
+  upper_rad: 1.5707963267948966
+  effort_nm: 0.96
+  policy_index_zero_based: 6
+  default_rad: 0.3490658503988659
+- name: head_yaw
+  parent_link: neck_pitch
+  child_link: yaw_roll_motion
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -2.9670597283903613
+  upper_rad: 2.9670597283903595
+  effort_nm: 0.96
+  policy_index_zero_based: 7
+  default_rad: 0
+- name: head_roll
+  parent_link: yaw_roll_motion
+  child_link: jaw_soft
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -0.43633231299858327
+  upper_rad: 0.4363323129985815
+  effort_nm: 0.96
+  policy_index_zero_based: 8
+  default_rad: 0
+- name: right_hip_yaw
+  parent_link: trunk_base
+  child_link: bearing_roll
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -0.523598775598297
+  upper_rad: 0.43633231299858416
+  effort_nm: 0.96
+  policy_index_zero_based: 9
+  default_rad: 0
+- name: right_hip_roll
+  parent_link: bearing_roll
+  child_link: hip_l_2
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -0.3839724354387507
+  upper_rad: 0.38397243543875426
+  effort_nm: 0.96
+  policy_index_zero_based: 10
+  default_rad: 0.08726646259971647
+- name: right_hip_pitch
+  parent_link: hip_l_2
+  child_link: upper_leg_right
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.57079632679494
+  upper_rad: 1.570796326794853
+  effort_nm: 0.96
+  policy_index_zero_based: 11
+  default_rad: 0.457924
+- name: right_knee
+  parent_link: upper_leg_right
+  child_link: leg_2
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267949339
+  upper_rad: 1.5707963267948593
+  effort_nm: 0.96
+  policy_index_zero_based: 12
+  default_rad: 0.00494
+- name: right_ankle
+  parent_link: leg_2
+  child_link: ankle_right
+  axis_local:
+  - 0.0
+  - 0.0
+  - 1.0
+  lower_rad: -1.5707963267949028
+  upper_rad: 1.5707963267948903
+  effort_nm: 0.96
+  policy_index_zero_based: 13
+  default_rad: -0.452984

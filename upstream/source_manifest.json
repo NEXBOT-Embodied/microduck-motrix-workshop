@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/Motphys/MotrixLab",
+  "commit": "1ddb9743c220c3a1e234ea0237d5ce9cc56d0499",
+  "archive_sha256": "8da71228a073e5d4d994742a94028f9182ab055e6097b84819a15701afec8f75",
+  "archive_member_files": 1934,
+  "code_modified": false,
+  "microduck_meshes_hydrated": 40,
+  "hydration_verifier": "models/microduck/tools/sync_upstream_assets.py",
+  "sdk_training_verified": false
+}

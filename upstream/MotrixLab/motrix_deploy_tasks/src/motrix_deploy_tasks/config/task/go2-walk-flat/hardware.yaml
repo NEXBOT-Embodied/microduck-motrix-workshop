@@ -1,0 +1,25 @@
+# @package _global_
+defaults:
+  - /runtime@runtime: _unitree_schema
+  - /unitree_control@runtime.control: go2
+  - _self_
+
+artifact: artifacts/go2-walk-flat.deploy
+
+runtime:
+  backend: unitree
+  robot: go2
+  transport:
+    implementation: python_sdk
+    network_interface: ???
+
+task_settings:
+  preparation:
+    kp: 50
+    kd: 1
+    ramp_duration_s: 2.0
+    max_joint_error_rad: 0.25
+    start_button: start
+    policy_button: A
+    stop_button: B
+duration_s: 300.0

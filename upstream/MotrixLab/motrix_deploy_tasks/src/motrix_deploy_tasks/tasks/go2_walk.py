@@ -1,0 +1,616 @@
+# Copyright Motphys Technology Co., Ltd. 2025, 2026
+# SPDX-License-Identifier: Apache-2.0
+
+"""Typed artifact specification and runtime for ``go2_walk/v1``."""
+
+import logging
+from dataclasses import dataclass, fields
+from math import isfinite
+from typing import Annotated, Any, ClassVar
+
+import numpy as np
+from motrix_robots.unitree import UnitreeGo2Robot
+from pydantic import Field, model_validator
+
+from motrix_deploy.artifact.schema import TaskSpec
+from motrix_deploy.contracts import FloatArray, JointServoCommand, RobotSpec, RobotState, float32_array
+from motrix_deploy.errors import ControlFailure, ValidationError
+from motrix_deploy.policy import Policy
+from motrix_deploy.policy.processing import PolicyProcessor
+from motrix_deploy.runtime.context import ControlContext
+from motrix_deploy.runtime.control import PolicyController
+from motrix_deploy.runtime.lifecycle import ControllerStep
+from motrix_deploy.task import DeployTask
+from motrix_env_core.input import (
+    BoundedGamePadPlanarVelocityBinding,
+    CommandBinding,
+    ConstantPlanarVelocityBinding,
+    GamePadDevice,
+    InputDevice,
+    KeyboardDevice,
+    KeyboardPlanarVelocityBinding,
+    PlanarVelocityCommand,
+)
+
+FLOAT32_MAX = float(np.finfo(np.float32).max)
+FiniteFloat = Annotated[float, Field(allow_inf_nan=False)]
+Float32Float = Annotated[FiniteFloat, Field(ge=-FLOAT32_MAX, le=FLOAT32_MAX)]
+NonNegativeFloat = Annotated[FiniteFloat, Field(ge=0)]
+PositiveFloat = Annotated[FiniteFloat, Field(gt=0)]
+JointVector = Annotated[list[Float32Float], Field(min_length=1)]
+NonNegativeJointVector = Annotated[list[Annotated[Float32Float, Field(ge=0)]], Field(min_length=1)]
+CommandVector = Annotated[list[Float32Float], Field(min_length=3, max_length=3)]
+CommandScale = Annotated[list[Annotated[Float32Float, Field(ge=0, le=1)]], Field(min_length=3, max_length=3)]
+FeetPhaseOffsets = Annotated[list[Float32Float], Field(min_length=4, max_length=4)]
+
+# Unitree remote wiring: the left stick drives planar motion, the right stick turns,
+# and L1 must be held (deadman) for stick input to reach the policy.
+_REMOTE_WIRING = {
+    "linear_x_axis": "ly",
+    "linear_y_axis": "lx",
+    "yaw_axis": "rx",
+    "deadzone": 0.12,
+    "invert_linear_x": False,
+    "invert_linear_y": True,
+    "invert_yaw": True,
+    "deadman_button": "L1",
+}
+
+
+class Go2WalkTaskSpec(TaskSpec):
+    """Self-contained control, command, gait and termination parameters."""
+
+    task_name: ClassVar[str] = "go2_walk/v1"
+
+    action_scale: NonNegativeJointVector
+    kp: NonNegativeJointVector
+    kd: NonNegativeJointVector
+    # Policy action bounds before scaling/default offset, not robot position limits.
+    action_lower: JointVector
+    action_upper: JointVector
+    command_lower: CommandVector
+    command_upper: CommandVector
+    command_scale: CommandScale
+    feet_phase_offsets: FeetPhaseOffsets
+    gait_frequency_hz: PositiveFloat
+    standing_threshold: NonNegativeFloat
+    termination_min_up_z: Annotated[FiniteFloat, Field(ge=-1, le=1)]
+
+    @model_validator(mode="after")
+    def validate_joint_vectors_and_ranges(self) -> "Go2WalkTaskSpec":
+        joint_count = len(self.action_scale)
+        for key in ("kp", "kd", "action_lower", "action_upper"):
+            if len(getattr(self, key)) != joint_count:
+                raise ValueError(f"{key} must have the same length as action_scale ({joint_count})")
+        if any(lower > upper for lower, upper in zip(self.action_lower, self.action_upper)):
+            raise ValueError("action_lower must be less than or equal to action_upper")
+        if any(lower > upper for lower, upper in zip(self.command_lower, self.command_upper)):
+            raise ValueError("command_lower must be less than or equal to command_upper")
+        return self
+
+
+class Go2WalkPolicyProcessor(PolicyProcessor[PlanarVelocityCommand]):
+    """Go2 walking policy I/O and artifact-owned fall termination.
+
+    Orientation termination is supported by both simulated and real IMU state.
+    """
+
+    def __init__(self, spec: Go2WalkTaskSpec, robot: RobotSpec) -> None:
+        if len(spec.action_scale) != robot.joint_count:
+            raise ValidationError(
+                "task.config.action_scale", f"{robot.joint_count} joint values", len(spec.action_scale)
+            )
+        self.spec = spec
+        self.robot = robot
+        self._action_scale = np.asarray(spec.action_scale, dtype=np.float32)
+        self._kp = np.asarray(spec.kp, dtype=np.float32)
+        self._kd = np.asarray(spec.kd, dtype=np.float32)
+        self._action_lower = np.asarray(spec.action_lower, dtype=np.float32)
+        self._action_upper = np.asarray(spec.action_upper, dtype=np.float32)
+        self._command_lower = np.asarray(spec.command_lower, dtype=np.float32)
+        self._command_upper = np.asarray(spec.command_upper, dtype=np.float32)
+        self._command_scale = np.asarray(spec.command_scale, dtype=np.float32)
+        self._feet_phase_offsets = np.asarray(spec.feet_phase_offsets, dtype=np.float32)
+        self._gait_frequency_hz = spec.gait_frequency_hz
+        self._standing_threshold = spec.standing_threshold
+        self._termination_min_up_z = spec.termination_min_up_z
+        self._previous_action: FloatArray = np.zeros(self.robot.joint_count, dtype=np.float32)
+        self._phase = np.float32(0.0)
+
+    @property
+    def command_lower(self) -> FloatArray:
+        return self._command_lower * self._command_scale
+
+    @property
+    def command_upper(self) -> FloatArray:
+        return self._command_upper * self._command_scale
+
+    def check_termination(self, state: RobotState) -> str | None:
+        x, y, _, _ = state.base_orientation_xyzw
+        up_z = 1.0 - 2.0 * (x * x + y * y)
+        if up_z <= self._termination_min_up_z:
+            return "fall_orientation"
+        return None
+
+    def reset(self, state: RobotState, context: ControlContext[PlanarVelocityCommand]) -> None:
+        """Reset action and gait history; callers provide validated state and command."""
+        self._previous_action.fill(0)
+        self._phase = np.float32(0.0)
+
+    def build_observation(self, state: RobotState, context: ControlContext[PlanarVelocityCommand]) -> FloatArray:
+        """Consume runtime-validated state and PolicyController-validated input commands."""
+        velocity = context.command.values[0, :]
+        phase = np.zeros(4, dtype=np.float32)
+        if np.linalg.norm(velocity) < self._standing_threshold:
+            self._phase = np.float32(0.0)
+        elif context.step > 0:
+            self._phase = np.float32((self._phase + context.dt_s * self._gait_frequency_hz) % 1.0)
+            phase = np.mod(self._phase + self._feet_phase_offsets, 1.0).astype(np.float32)
+        observation = np.concatenate(
+            (
+                state.base_angular_velocity,
+                _projected_gravity(state.base_orientation_xyzw),
+                state.joint_position - self.robot.default_joint_position,
+                state.joint_velocity,
+                self._previous_action,
+                velocity,
+                phase,
+            )
+        ).astype(np.float32)
+        return observation
+
+    def process_action(self, action: FloatArray) -> JointServoCommand:
+        raw = float32_array(action, path="action.raw", shape=(self.robot.joint_count,))
+        executed = np.clip(raw, self._action_lower, self._action_upper).astype(np.float32)
+        target = self.robot.default_joint_position + self._action_scale * executed
+        target = np.clip(target, self.robot.position_lower, self.robot.position_upper).astype(np.float32)
+        self._previous_action = executed
+        zeros = np.zeros(self.robot.joint_count, dtype=np.float32)
+        return JointServoCommand(
+            joint_position=target,
+            joint_velocity=zeros,
+            feedforward_torque=zeros,
+            kp=self._kp,
+            kd=self._kd,
+        )
+
+    def validate_command(self, command: PlanarVelocityCommand | None) -> None:
+        if not isinstance(command, PlanarVelocityCommand):
+            raise ValidationError("command.type", "PlanarVelocityCommand", type(command).__name__)
+        if command.batch_size != 1:
+            raise ValidationError("command.batch_size", "1", command.batch_size)
+        velocity = command.values[0, :]
+        if np.any(velocity < self._command_lower) or np.any(velocity > self._command_upper):
+            raise ValidationError(
+                "command.velocity",
+                f"inside [{self._command_lower.tolist()}, {self._command_upper.tolist()}]",
+                velocity.tolist(),
+            )
+
+
+def _projected_gravity(orientation_xyzw: FloatArray) -> FloatArray:
+    x, y, z, w = orientation_xyzw
+    rotation = np.array(
+        [
+            [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+            [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+            [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
+        ],
+        dtype=np.float32,
+    )
+    return rotation @ np.array([0.0, 0.0, -1.0], dtype=np.float32)
+
+
+@dataclass(frozen=True)
+class Go2WalkPreparationSettings:
+    """Measured standing transition and operator controls, separate from policy gains."""
+
+    ramp_duration_s: float = 2.0
+    settle_duration_s: float = 0.5
+    timeout_s: float = 6.0
+    max_joint_error_rad: float = 0.2
+    max_joint_velocity_rad_s: float = 1.0
+    max_base_tilt_rad: float = 0.5
+    kp: float = 50.0
+    kd: float = 1.0
+    damping_duration_s: float = 1.0
+    stop_damping_duration_s: float = 10.0
+    damping_kd: float = 8.0
+    start_button: str = "start"
+    policy_button: str = "A"
+    stop_button: str = "B"
+
+    def __post_init__(self) -> None:
+        buttons = (self.start_button, self.policy_button, self.stop_button)
+        if all(isinstance(button, str) for button in buttons):
+            if len(set(buttons)) != len(buttons):
+                raise ValueError("preparation start, policy and stop buttons must be distinct")
+            if any(button.casefold() == "select" for button in (self.start_button, self.policy_button)):
+                raise ValueError("preparation startup buttons must not use the backend Select emergency stop")
+        for field in fields(self):
+            value = getattr(self, field.name)
+            if field.name.endswith("_button"):
+                if not isinstance(value, str) or not value.strip():
+                    raise ValueError(f"preparation.{field.name} must be a nonempty button name")
+            elif (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not isfinite(value)
+                or not 0 < value <= FLOAT32_MAX
+            ):
+                raise ValueError(f"preparation.{field.name} must be finite and positive (float32 representable)")
+
+
+class Go2WalkDeployTask(DeployTask[PlanarVelocityCommand]):
+    """Go2 walking policy with task-owned measured preparation and operator shutdown."""
+
+    spec_type = Go2WalkTaskSpec
+
+    def __init__(
+        self,
+        spec: Go2WalkTaskSpec,
+        robot: RobotSpec,
+        policy: Policy,
+        steps: int | None = None,
+        artifact=None,
+        *,
+        settings: dict[str, Any] | None = None,
+    ):
+        self.spec = spec
+        self.robot = robot
+        self.policy_io = Go2WalkPolicyProcessor(spec, robot)
+        self.policy_controller = PolicyController(self.policy_io, policy, steps=steps)
+        settings = {} if settings is None else settings
+        if not isinstance(settings, dict):
+            raise ValueError("task_settings must be a dict")
+        unknown = settings.keys() - {"preparation"}
+        if unknown:
+            raise ValueError(f"Unknown Go2 task settings: {sorted(unknown)}")
+        preparation = Go2WalkPreparationSettings()
+        if "preparation" in settings:
+            values = settings["preparation"]
+            if not isinstance(values, dict):
+                raise ValueError("task_settings.preparation must be a dict")
+            preparation = Go2WalkPreparationSettings(**values)
+        self._preparation = preparation
+
+        self._stage = "wait_stand"
+        self._stage_start_s = 0.0
+        self._stop_requested = False
+        self._start_position: FloatArray | None = None
+        self._ready_since_s: float | None = None
+        self._policy_start_s = 0.0
+        self._keyboard = None
+        self._gamepad: GamePadDevice | None = None
+        self._shutdown_position: FloatArray | None = None
+        self._shutdown_duration_s = 2.0
+        self._shutdown_requested = False
+        self._return_to_spawn_pose = False
+        self._poll_keyboard = True
+        self._automatic_start = True
+        self._stand_requested = False
+        self._policy_start_requested = False
+        self._preparation_ready = False
+        self._zeros = np.zeros(robot.joint_count, dtype=np.float32)
+
+    def enable_simulation_preparation(self, settings: Go2WalkPreparationSettings | None = None) -> None:
+        """Configure measured crouch-to-stand and damping stages for simulation."""
+        self._preparation = settings if settings is not None else Go2WalkPreparationSettings()
+
+    def prepare(
+        self,
+        *,
+        simulation: bool,
+        device: InputDevice | None = None,
+        spawn_pose: str | None = None,
+    ) -> CommandBinding[PlanarVelocityCommand]:
+        """Bind input for the shared crouch-to-stand preparation and policy lifecycle."""
+        if not simulation:
+            if not isinstance(device, GamePadDevice):
+                raise ValidationError(
+                    "operator.gamepad", "a GamePadDevice for hardware preparation", type(device).__name__
+                )
+            pose = UnitreeGo2Robot().key_pose
+            if set(pose.joint_names) != set(self.robot.joint_names):
+                raise ValidationError("robot.joint_names", "the canonical Go2 joints", self.robot.joint_names)
+            positions = dict(zip(pose.joint_names, pose.poses["lie_down"], strict=True))
+            target = np.asarray([positions[name] for name in self.robot.joint_names], dtype=np.float32)
+            bounded = np.clip(target, self.robot.position_lower, self.robot.position_upper).astype(np.float32)
+            limited = np.flatnonzero(bounded != target)
+            if limited.size:
+                logging.getLogger(__name__).warning(
+                    "Go2 shutdown crouch is limited by artifact joint bounds at %s; "
+                    "the bounded pose does not guarantee body support on the ground.",
+                    ", ".join(self.robot.joint_names[index] for index in limited),
+                )
+            self._shutdown_position = bounded
+        self._return_to_spawn_pose = simulation
+        command_lower, command_upper = self.command_bounds
+        if isinstance(device, KeyboardDevice):
+            binding: CommandBinding[PlanarVelocityCommand] = KeyboardPlanarVelocityBinding(
+                device, command_lower=command_lower, command_upper=command_upper
+            )
+        elif isinstance(device, GamePadDevice):
+            binding = BoundedGamePadPlanarVelocityBinding(
+                device,
+                linear_x_axis=_REMOTE_WIRING["linear_x_axis"],
+                linear_y_axis=_REMOTE_WIRING["linear_y_axis"],
+                yaw_axis=_REMOTE_WIRING["yaw_axis"],
+                command_lower=command_lower,
+                command_upper=command_upper,
+                deadzone=_REMOTE_WIRING["deadzone"],
+                invert_linear_x=_REMOTE_WIRING["invert_linear_x"],
+                invert_linear_y=_REMOTE_WIRING["invert_linear_y"],
+                invert_yaw=_REMOTE_WIRING["invert_yaw"],
+                deadman_button=_REMOTE_WIRING["deadman_button"],
+            )
+        else:
+            # Headless playback holds still; the policy keeps standing commands in bounds.
+            binding = ConstantPlanarVelocityBinding((0.0, 0.0, 0.0))
+            self.validate_command(binding.read_command())
+        if isinstance(device, KeyboardDevice):
+            # Share the device with the velocity binding; let it poll first when present.
+            self.attach_keyboard(device, poll=not isinstance(binding, KeyboardPlanarVelocityBinding))
+        if isinstance(device, GamePadDevice):
+            # The command binding polls this shared device before each controller step.
+            self._gamepad = device
+            self._automatic_start = False
+        return binding
+
+    def attach_keyboard(self, keyboard, *, poll: bool = True) -> None:
+        """Require Start and A analogues; a shared velocity binding polls the device first."""
+        if keyboard is None:
+            raise ValidationError("operator.keyboard", "a viewer keyboard device", None)
+        self._keyboard = keyboard
+        self._poll_keyboard = poll
+        self._automatic_start = False
+
+    def request_stand(self) -> None:
+        """Latch the first operator confirmation without commanding from an input thread."""
+        self._stand_requested = True
+
+    def request_policy_start(self) -> None:
+        """Latch takeover intent; policy still waits for measured standing readiness."""
+        if self._preparation_ready:
+            self._policy_start_requested = True
+
+    @property
+    def operator_hint(self) -> str | None:
+        if self._gamepad is not None:
+            settings = self._preparation
+            return (
+                f"{settings.start_button} stand up (Start)  {settings.policy_button} enable policy (A, after ready)  "
+                f"{settings.stop_button} lie down then stop (B)  Select emergency stop"
+            )
+        if self._keyboard is None:
+            return None
+        if self._shutdown_position is not None or self._return_to_spawn_pose:
+            return "r stand up (Start)  p enable policy (A)  o lie down then close"
+        return "r stand up (Start)  p enable policy (A)  o damp for 10s then close"
+
+    def _process_operator_input(self) -> None:
+        if self._gamepad is not None:
+            settings = self._preparation
+            if self._gamepad.is_button_down(settings.start_button):
+                self.request_stand()
+            if self._stage == "wait_policy" and self._gamepad.is_button_down(settings.policy_button):
+                self.request_policy_start()
+            if self._gamepad.is_button_pressing(settings.stop_button):
+                self._shutdown_requested = True
+        elif self._keyboard is not None:
+            if self._poll_keyboard:
+                self._keyboard.poll()
+            if self._keyboard.is_key_down("r"):
+                self.request_stand()
+            if self._stage == "wait_policy" and self._keyboard.is_key_down("p"):
+                self.request_policy_start()
+            if self._keyboard.is_key_down("o"):
+                if self._shutdown_position is not None:
+                    self._shutdown_requested = True
+                else:
+                    self.request_stop()
+        elif self._automatic_start:
+            self.request_stand()
+            if self._preparation_ready:
+                self.request_policy_start()
+
+    @property
+    def phase(self) -> str:
+        return self._stage
+
+    @property
+    def command_bounds(self) -> tuple[FloatArray, FloatArray]:
+        return self.policy_io.command_lower, self.policy_io.command_upper
+
+    def validate_command(self, command: PlanarVelocityCommand | None) -> None:
+        self.policy_io.validate_command(command)
+
+    def reset(self, state: RobotState) -> None:
+        if self._return_to_spawn_pose and self._shutdown_position is None:
+            # Capture the simulation's actual initialized crouch, not an asset pose
+            # that may have been clipped when bound to this artifact.
+            self._shutdown_position = np.clip(
+                state.joint_position, self.robot.position_lower, self.robot.position_upper
+            ).astype(np.float32)
+        self._stage = "wait_stand"
+        self._stage_start_s = 0.0
+        self._stop_requested = False
+        self._shutdown_requested = False
+        self._start_position = state.joint_position.copy()
+        self._ready_since_s = None
+        self._policy_start_s = 0.0
+        self._stand_requested = False
+        self._policy_start_requested = False
+        self._preparation_ready = False
+
+    def _validate_transition_start(self, state: RobotState, transition: str) -> None:
+        # Clamping an out-of-range measured start would skip the ramp and apply
+        # startup stiffness at a discontinuous position target. Fail closed instead.
+        if np.any(state.joint_position < self.robot.position_lower) or np.any(
+            state.joint_position > self.robot.position_upper
+        ):
+            raise ControlFailure(
+                f"{transition}_initial_state_out_of_range",
+                f"Go2 {transition} measured joint positions must be inside robot position limits before ramping",
+            )
+
+    def _preparation_diagnostics(self, state: RobotState, elapsed: float, tilt: float) -> str:
+        """Describe readiness at failure without logging on the control hot path."""
+        settings = self._preparation
+        errors = np.abs(state.joint_position - self.robot.default_joint_position)
+        speeds = np.abs(state.joint_velocity)
+        stable_s = 0.0 if self._ready_since_s is None else max(0.0, elapsed - self._ready_since_s)
+        unmet = []
+        if elapsed < settings.ramp_duration_s:
+            unmet.append("ramp_duration")
+        if np.any(errors > settings.max_joint_error_rad):
+            unmet.append("joint_position_error")
+        if np.any(speeds > settings.max_joint_velocity_rad_s):
+            unmet.append("joint_velocity")
+        if tilt > settings.max_base_tilt_rad:
+            unmet.append("base_tilt")
+        if stable_s + 1e-9 < settings.settle_duration_s:
+            unmet.append("settle_duration")
+        joints = "; ".join(
+            f"{name}: measured={state.joint_position[i]:.6f} rad, "
+            f"target={self.robot.default_joint_position[i]:.6f} rad, "
+            f"abs_error={errors[i]:.6f} rad, velocity={state.joint_velocity[i]:.6f} rad/s"
+            for i, name in enumerate(self.robot.joint_names)
+            if errors[i] > settings.max_joint_error_rad or speeds[i] > settings.max_joint_velocity_rad_s
+        )
+        error_index = int(np.argmax(errors))
+        speed_index = int(np.argmax(speeds))
+        return (
+            f"unmet=[{', '.join(unmet)}]; elapsed={elapsed:.3f}s, "
+            f"ramp_required={settings.ramp_duration_s:.3f}s, timeout={settings.timeout_s:.3f}s; "
+            f"stable={stable_s:.3f}/{settings.settle_duration_s:.3f}s; "
+            f"max_abs_error={errors[error_index]:.6f}/{settings.max_joint_error_rad:.6f} rad "
+            f"({self.robot.joint_names[error_index]}); "
+            f"max_abs_velocity={speeds[speed_index]:.6f}/{settings.max_joint_velocity_rad_s:.6f} rad/s "
+            f"({self.robot.joint_names[speed_index]}); "
+            f"tilt={tilt:.6f}/{settings.max_base_tilt_rad:.6f} rad; "
+            f"violating_joints=[{joints}]"
+        )
+
+    def _servo(self, position: FloatArray, kp: float, kd: float) -> JointServoCommand:
+        return JointServoCommand(
+            np.clip(position, self.robot.position_lower, self.robot.position_upper).astype(np.float32),
+            self._zeros,
+            self._zeros,
+            np.full(self.robot.joint_count, kp, dtype=np.float32),
+            np.full(self.robot.joint_count, kd, dtype=np.float32),
+        )
+
+    def step(self, state: RobotState, context: ControlContext[PlanarVelocityCommand]) -> ControllerStep:
+        settings = self._preparation
+        self._process_operator_input()
+        if self._stop_requested and self._stage not in {"damping", "complete"}:
+            self._stage = "damping"
+            self._stage_start_s = context.elapsed_time_s
+        elif self._shutdown_requested and self._stage not in {"shutdown", "damping", "complete"}:
+            if self._stage == "wait_stand":
+                # Before standing, measured folded joints may be outside model limits.
+                # Do not initiate an active trajectory just to finish the task.
+                self._stage = "damping"
+            else:
+                self._validate_transition_start(state, "shutdown")
+                self._stage = "shutdown"
+                self._start_position = state.joint_position.copy()
+            self._stage_start_s = context.elapsed_time_s
+        if self._stage == "shutdown":
+            elapsed = context.elapsed_time_s - self._stage_start_s
+            if elapsed + 1e-9 >= self._shutdown_duration_s:
+                self._stage = "damping"
+                self._stage_start_s = context.elapsed_time_s
+            else:
+                assert self._start_position is not None and self._shutdown_position is not None
+                fraction = np.float32(min((elapsed + context.dt_s) / self._shutdown_duration_s, 1.0))
+                target = self._start_position + fraction * (self._shutdown_position - self._start_position)
+                return ControllerStep(command=self._servo(target, settings.kp, settings.kd))
+        if self._stage == "wait_stand":
+            if not self._stand_requested:
+                return ControllerStep(command=self._servo(state.joint_position, 0.0, settings.damping_kd))
+            self._stage = "prepare"
+            self._stage_start_s = context.elapsed_time_s
+            self._start_position = state.joint_position.copy()
+        if self._stage == "prepare":
+            elapsed = context.elapsed_time_s - self._stage_start_s
+            x, y, _, _ = state.base_orientation_xyzw
+            tilt = float(np.arccos(np.clip(1 - 2 * (float(x) ** 2 + float(y) ** 2), -1, 1)))
+            if tilt > settings.max_base_tilt_rad:
+                return ControllerStep(
+                    error=(
+                        "unsafe base tilt during Go2 preparation: "
+                        + self._preparation_diagnostics(state, elapsed, tilt)
+                    )
+                )
+            ready = (
+                elapsed >= settings.ramp_duration_s
+                and np.max(np.abs(state.joint_position - self.robot.default_joint_position))
+                <= settings.max_joint_error_rad
+                and np.max(np.abs(state.joint_velocity)) <= settings.max_joint_velocity_rad_s
+            )
+            if not ready:
+                self._ready_since_s = None
+            elif self._ready_since_s is None:
+                self._ready_since_s = elapsed
+            if self._ready_since_s is not None and elapsed - self._ready_since_s + 1e-9 >= settings.settle_duration_s:
+                self._preparation_ready = True
+                self._stage = "wait_policy"
+            elif elapsed + 1e-9 >= settings.timeout_s:
+                return ControllerStep(
+                    error="Go2 standing preparation timed out: " + self._preparation_diagnostics(state, elapsed, tilt)
+                )
+            else:
+                assert self._start_position is not None
+                fraction = np.float32(min((elapsed + context.dt_s) / settings.ramp_duration_s, 1.0))
+                target = self._start_position + fraction * (self.robot.default_joint_position - self._start_position)
+                return ControllerStep(command=self._servo(target, settings.kp, settings.kd))
+        if self._stage == "wait_policy":
+            if not self._policy_start_requested:
+                return ControllerStep(command=self._servo(self.robot.default_joint_position, settings.kp, settings.kd))
+            # Readiness is measured again at takeover, not trusted as a stale latch.
+            self._preparation_ready = False
+            self._policy_start_requested = False
+            self._validate_transition_start(state, "preparation")
+            x, y, _, _ = state.base_orientation_xyzw
+            tilt = float(np.arccos(np.clip(1 - 2 * (float(x) ** 2 + float(y) ** 2), -1, 1)))
+            if (
+                np.max(np.abs(state.joint_position - self.robot.default_joint_position)) > settings.max_joint_error_rad
+                or np.max(np.abs(state.joint_velocity)) > settings.max_joint_velocity_rad_s
+                or tilt > settings.max_base_tilt_rad
+            ):
+                raise ControlFailure(
+                    "preparation_not_ready", "Go2 measured standing readiness was lost before policy takeover"
+                )
+            self._preparation_ready = True
+            self.policy_controller.reset(state)
+            self._policy_start_s = context.elapsed_time_s
+            self._stage = "policy"
+        if self._stage == "policy":
+            local = ControlContext(
+                context.step,
+                context.elapsed_time_s - self._policy_start_s,
+                context.command,
+                context.dt_s,
+            )
+            decision = self.policy_controller.step(state, local)
+            if not decision.complete:
+                return decision
+            self._stage = "damping"
+            self._stage_start_s = context.elapsed_time_s
+        if self._stage == "damping":
+            damping_duration_s = (
+                settings.stop_damping_duration_s if self._stop_requested else settings.damping_duration_s
+            )
+            if context.elapsed_time_s - self._stage_start_s + 1e-9 >= damping_duration_s:
+                self._stage = "complete"
+                return ControllerStep(complete=True, success=not self._stop_requested)
+            return ControllerStep(
+                command=self._servo(state.joint_position, 0.0, settings.damping_kd),
+                success=not self._stop_requested,
+            )
+        return ControllerStep(complete=True, success=not self._stop_requested)
+
+    def request_stop(self) -> None:
+        self._stop_requested = True

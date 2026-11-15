@@ -1,0 +1,245 @@
+# 小鸭子平地行走：集中修改训练约束
+#
+# 怎么用：在 PowerShell 中进入本资料包的“03_教学工程”目录，再复制下面的整条命令。
+# .\tools\lesson.cmd train --steps 256 --constraints configs/walking_constraints.yaml --dry-run
+# 先看预览。确认后去掉 --dry-run；加 --render 就会显示真实训练画面并按原设置录像。
+# 256 是新增采样循环，适合验证流程；这么短的训练不保证走得更好。
+#
+# 这里列出了本课程平地任务现有的全部参数组，数值沿用 课堂起步模型的任务设置。
+# task 和 evaluation 中的值会被程序实际读取。一次只改一项，便于比较训练前后变化。
+# 提供 --constraints 后，以此文件为准，不再叠加 experiment.yaml 的动作惩罚倍率。
+# 原来的 走偏示例和直行候选权重不会改动；新训练会另存模型和这份配置的数值快照。
+# play-trained 回放时读取该次训练的快照，之后再修改本文件不会改变旧模型的回放。
+#
+# 范围：平地任务的指令、奖励、动作、结束条件、随机扰动、观测、仿真步长。
+# 训练轮数仍用 --steps；显存、学习率、网络结构属于训练配置，不在本文件调整。
+# 模型里的关节硬限位、舵机参数和地形资产不是奖励条件，见文件末尾的只读说明。
+
+schema_version: 1  # 文件格式版本，保持 1。
+
+task:
+  # 一次尝试最多走多久。到时间会结束本回合并重新开始，不代表整场训练结束。
+  max_episode_seconds: 20.0  # 秒。
+  ctrl_dt: 0.02  # 每 0.02 秒让策略决定一次动作，即每秒 50 次。
+
+  sim:
+    dt: 0.005  # 物理计算每次前进 0.005 秒；当前每次动作之间算 4 次物理。
+    solver_iterations: 6  # 每步物理求解次数；更多可能更慢，不等于训练轮数更多。
+    solver_tolerance: 0.0001  # 物理求解的容差；越小要求越严格。
+    gravity: null  # 沿用引擎默认重力；要覆盖时填 [0.0, 0.0, -9.81]，单位 m/s²。
+
+  commands:
+    walk:
+      # 训练时给小鸭子的目标速度；不是限制它实际一定能达到的速度。
+      # 两行依次是下限和上限。每行：[前进 m/s, 左右横移 m/s, 转向 rad/s]。
+      # 当前只练向前走：前进目标在 0.12～0.25 之间，横移和转向目标都是 0。
+      vel_limit:
+        - [0.12, 0.0, 0.0]
+        - [0.25, 0.0, 0.0]
+      resampling_time: 10.0  # 每隔多少秒重新抽取一个目标速度。
+      ctrl_dt: 0.02  # 必须与上面的 task.ctrl_dt 相同。
+      stand_prob: 0.0  # 抽到“原地站住”指令的概率；0 表示不专门练站立，1 表示总站立。
+      gait_period: 0.5  # 步态参考周期，单位秒；缩短会要求更快的参考节奏。
+      gait_period_randomization_width: 0.0  # 周期的随机变化半宽，秒；0 表示固定节奏。
+
+      # 训练初期先把部分扣分打折，站得更久后逐渐加严。
+      # 影响晃动、倾斜、动作变化、姿态、双脚间距和脚底朝向扣分。
+      # 不影响 tracking 奖励、alive 奖励，也不影响新增的 heading_rate 扣分。
+      curriculum_enabled: true
+      initial_scale: 0.5  # 开始按 50% 计算这些扣分。
+      min_scale: 0.5  # 最低扣分倍率。
+      max_scale: 1.0  # 最高扣分倍率。
+      level_down_threshold: 150.0  # 平滑后的平均回合长度低于此步数，就降低扣分倍率。
+      level_up_threshold: 750.0  # 高于此步数，就提高扣分倍率；这是控制步数，不是秒。
+      degree: 0.001  # 每次调整乘 1±0.001；不是每轮固定增加 0.001 分。
+
+  # 奖励：正的 weight 表示加分；负的表示扣分；0 可以关闭该项。
+  # 权重还会乘该项实际计算结果和控制周期，不能直接把 -20 理解为每步扣 20 分。
+  # 加重某项只能让策略更在意它，不能保证最终行为改善。
+  rewards:
+    tracking_lin_vel:
+      weight: 18.0  # 按目标前进/横移速度走就加分；更大表示更重视速度跟踪。
+      sigma: 0.02  # 速度误差的容忍尺度；越小越严格。公式中用误差平方/sigma。
+      command_name: walk  # 读取 walk 指令，保持名称不变。
+      body: robot  # 观察 robot 机身，保持名称不变。
+
+    tracking_ang_vel:
+      weight: 3.0  # 按目标转向速度走就加分；目标为 0 时，鼓励少转向。
+      sigma: 0.15  # 转向速度误差容忍尺度；越小越严格。
+      command_name: walk
+      body: robot
+
+    penalty_heading_rate:
+      weight: -20.0  # 机身水平朝向变化得快就扣分；-25 比 -20 扣得更重。
+      sigma: 0.015  # 越小，对轻微转向越敏感。
+      body: robot
+      # 原始成本 = 1-exp(-水平朝向变化率²/sigma)，范围 0～1。
+      # 这项控制“转得快不快”，没有直接惩罚“离出发朝向偏了几度”或“偏离直线几米”。
+
+    penalty_ang_vel_xy:
+      weight: -1.0  # 扣除机身前后、左右晃动的成本；更负表示更在意晃动。
+    penalty_orientation:
+      weight: -10.0  # 机身倾斜就扣分；属于软性要求，不是超过某角度直接判跌倒。
+    penalty_action_rate:
+      weight: -0.5  # 相邻两次动作变化太大就扣分；过重可能让小鸭子不愿迈步。
+
+    feet_phase:
+      weight: 6.0  # 双脚高度跟随步态参考节奏就加分；不是简单奖励抬得越高越好。
+      swing_height: 0.04  # 参考抬脚高度，米；0.04 即 4 厘米。
+      feet_phase_sigma: 0.002  # 脚高度误差的容忍尺度；越小越严格。
+      sole_l_site: left_foot  # 模型中左脚测量点的名称，保持不变。
+      sole_r_site: right_foot  # 右脚测量点，保持不变。
+      ground_geom: floor  # 测量脚离哪块地面多高，保持不变。
+
+    penalty_close_feet_xy:
+      weight: -10.0  # 双脚在机身左右方向靠得太近就扣分。
+      close_feet_threshold: 0.05  # 米；横向脚距小于 5 厘米触发，不是两脚三维直线距离。
+    penalty_feet_ori:
+      weight: -5.0  # 脚底朝向偏离默认站姿时扣分，减少翻脚。
+    alive:
+      weight: 2.0  # 回合还没结束就给存活奖励；太大可能让策略只求不倒。
+
+    pose:
+      weight: -0.5  # 关节偏离默认站姿就扣分；下面各关节权重越大，越不鼓励它乱动。
+      # 这些是姿态偏差的权重，不是关节角度上限，也不是舵机最大力矩。
+      pose_weights:
+        left_hip_yaw: 5.0  # 左髋转向。
+        left_hip_roll: 1.0  # 左髋左右摆。
+        left_hip_pitch: 0.01  # 左髋前后摆；较低，允许迈步。
+        left_knee: 0.01  # 左膝。
+        left_ankle: 5.0  # 左踝。
+        neck_pitch: 50.0  # 颈部前后摆，较重地限制乱动。
+        head_pitch: 50.0  # 头部俯仰。
+        head_yaw: 50.0  # 头部转向。
+        head_roll: 50.0  # 头部侧倾。
+        right_hip_yaw: 5.0  # 右髋转向。
+        right_hip_roll: 1.0  # 右髋左右摆。
+        right_hip_pitch: 0.01  # 右髋前后摆。
+        right_knee: 0.01  # 右膝。
+        right_ankle: 5.0  # 右踝。
+
+  actions:
+    joint_position:
+      action_scale: 0.5  # 策略输出每变化 1，目标关节角偏移 0.5 弧度；以默认站姿为中心。
+      action_scales_by_effort_limit_over_p_gain: false  # 不额外按舵机力矩/增益缩放幅度。
+      action_delay_steps: [0, 0]  # 执行动作延迟的控制步数范围；[0,0] 表示不延迟。
+      actuator_names: null  # 使用模型中的全部执行器；不要修改，以免旧权重维度对不上。
+      # 目标角还会按模型的关节硬限位裁剪，action_scale 不是硬限位。
+
+  terminations:
+    colliding:
+      termination_geoms: [trunk_collision]  # 当前机身碰地就判本回合失败，重置后继续训练。
+      ground_geom: floor  # 与 floor 地面检查碰撞；模型名称保持不变。
+      # 本任务没有独立的“倾斜超过 X 度”或“机身高度低于 X 米”结束项，不要凭空添加键。
+
+  sim_reset:
+    humanoid_state:
+      spawn_xy_range: 0.0  # 出生位置在水平面的随机半宽，米；0 表示从默认位置开始。
+      ground_geom: floor
+      randomization:
+        enabled: false  # 是否每次重新开始时随机改变物理参数；false 时下列扰动不生效。
+        kp_scale_range: [1.0, 1.0]  # 关节位置控制力度的倍率范围；相同两值表示不随机修改该项。
+        damping_scale_range: [1.0, 1.0]  # 关节阻尼倍率范围。
+        sliding_friction_range: null  # 地面摩擦倍率范围，例如 [0.8,1.2]；null 表示不修改。
+        link_mass_scale_range: [1.0, 1.0]  # 除机身基座外，各连杆质量的倍率范围。
+        base_mass_offset_range: [0.0, 0.0]  # 机身基座额外增加的质量范围，千克，不是倍率。
+        base_com_offset_noise: [0.0, 0.0, 0.0]  # 机身重心在 x/y/z 各方向随机偏移半宽，米。
+
+  # 策略看到什么：不改变字段名称、顺序和维度，避免已训练模型无法使用。
+  # scale 只缩放输入数值，不是运动限制；noise.amplitude 是添加均匀噪声的半宽。
+  observations:
+    policy:  # 真正负责选动作的网络输入。
+      base_ang_vel:
+        body: robot
+        scale: 0.25  # 机身角速度输入乘 0.25。
+        noise:
+          amplitude: 0.0  # 不额外加入角速度观测噪声。
+      projected_gravity:
+        body: robot
+        noise:
+          amplitude: 0.0  # 重力方向输入，用来判断机身倾斜。
+      command:
+        command_name: walk  # 目标前进、横移、转向速度。
+      joint_pos:
+        body: robot
+        scale: 1.0  # 各关节相对默认站姿的角度输入。
+        noise:
+          amplitude: 0.01  # 给关节角观测加轻微噪声；不是限制关节只能动 0.01。
+      joint_vel:
+        body: robot
+        scale: 0.05  # 关节速度输入乘 0.05。
+        noise:
+          amplitude: 0.1  # 关节速度的观测噪声半宽。
+      actions:
+        action_name: joint_position  # 把上一动作也提供给策略。
+      sin_phase:
+        offset: 0  # 左右脚参考相位的正弦分量，固定布局。
+        size: 2
+      cos_phase:
+        offset: 2  # 左右脚参考相位的余弦分量，固定布局。
+        size: 2
+
+    value:  # 训练时负责评价动作好坏的网络输入，比 policy 多机身线速度。
+      base_lin_vel:
+        body: robot
+        scale: 2.0  # 机身线速度输入乘 2。
+        noise:
+          amplitude: 0.0
+      base_ang_vel:
+        body: robot
+        scale: 0.25
+        noise:
+          amplitude: 0.0
+      projected_gravity:
+        body: robot
+        noise:
+          amplitude: 0.0
+      command:
+        command_name: walk
+      joint_pos:
+        body: robot
+        scale: 1.0
+        noise:
+          amplitude: 0.0  # 评价网络的关节角输入不额外加噪声。
+      joint_vel:
+        body: robot
+        scale: 0.05
+        noise:
+          amplitude: 0.0
+      actions:
+        action_name: joint_position
+      sin_phase:
+        offset: 0
+        size: 2
+      cos_phase:
+        offset: 2
+        size: 2
+
+evaluation:
+  command: [0.15, 0.0, 0.0]  # 回放时固定目标：[前进 m/s, 横移 m/s, 转向 rad/s]。
+  # 这一项不改变训练时抽取目标的范围；训练范围请改 task.commands.walk.vel_limit。
+
+# 模型硬限制（只读参考，不从这里覆盖）
+# 实际模型：upstream/MotrixLab/motrix_robots/src/motrix_robots/assets/microduck/microduck.xml
+# 默认站姿：同目录上级 microduck.py 的 key_pose.poses.default。
+# 关节角度上下限、舵机最大力矩、位置控制增益、碰撞形状和质量来自上述模型文件。
+# 修改这些属于改机器人模型，会影响旧权重与对照实验；不能只改下面的注释让模型变化。
+# 本课程不添加 Sim2Real；本文件也不含真实机器人通信或控制指令。
+
+# 以下范围直接抄录自当前模型，角度单位是弧度；只作查阅，修改注释不会改变模型。
+# left_hip_yaw: [-0.4363323129985824, 0.5235987755982988]
+# left_hip_roll: [-0.3839724354386992, 0.38397243543880577]
+# left_hip_pitch: [-1.570796326794949, 1.5707963267948442]
+# left_knee: [-1.5707963267948983, 1.5707963267948948]
+# left_ankle: [-1.5707963267949063, 1.5707963267948868]
+# neck_pitch: [-1.5707963267948974, 1.0471975511965967]
+# head_pitch: [-1.5707963267948966, 1.5707963267948966]
+# head_yaw: [-2.9670597283903613, 2.9670597283903595]
+# head_roll: [-0.43633231299858327, 0.4363323129985815]
+# right_hip_yaw: [-0.523598775598297, 0.43633231299858416]
+# right_hip_roll: [-0.3839724354387507, 0.38397243543875426]
+# right_hip_pitch: [-1.57079632679494, 1.570796326794853]
+# right_knee: [-1.5707963267949339, 1.5707963267948593]
+# right_ankle: [-1.5707963267949028, 1.5707963267948903]
+# 当前 14 个执行器均使用 chosen_actuator：kp=0.55, kv=0.0, forcerange=[-0.96, 0.96], ctrlrange=[-10.0, 10.0]。
+# forcerange 是关节输出力矩范围（N·m），ctrlrange 是执行器目标输入范围（弧度）。

@@ -1,0 +1,55 @@
+status: statically_derived_runtime_unverified
+source_commit: 1ddb9743c220c3a1e234ea0237d5ce9cc56d0499
+source_files:
+  robot: motrix_robots/src/motrix_robots/microduck.py
+  observations: motrix_envs/src/motrix_envs/locomotion/humanoid/cfg.py
+  command: motrix_envs/src/motrix_envs/locomotion/humanoid/walk_manager_mdp/command.py
+  task: motrix_envs/src/motrix_envs/locomotion/humanoid/microduck.py
+policy_observation:
+  expected_dimension: 55
+  ordered_terms:
+    - {name: base_ang_vel, size: 3, scale: 0.25}
+    - {name: projected_gravity, size: 3}
+    - {name: command_vx_vy_wz, size: 3}
+    - {name: joint_pos_relative, size: 14, scale: 1.0}
+    - {name: joint_vel, size: 14, scale: 0.05}
+    - {name: previous_action, size: 14}
+    - {name: sin_phase_left_right, size: 2}
+    - {name: cos_phase_left_right, size: 2}
+value_observation:
+  expected_dimension: 58
+  prepend: {name: base_lin_vel, size: 3, scale: 2.0}
+  follows: policy_order_without_joint_noise
+action:
+  expected_dimension: 14
+  type: joint_position_relative_to_default_pose
+  action_scale: 0.5
+  joint_order:
+    - left_hip_yaw
+    - left_hip_roll
+    - left_hip_pitch
+    - left_knee
+    - left_ankle
+    - neck_pitch
+    - head_pitch
+    - head_yaw
+    - head_roll
+    - right_hip_yaw
+    - right_hip_roll
+    - right_hip_pitch
+    - right_knee
+    - right_ankle
+timing:
+  simulation_dt_seconds: 0.005
+  control_dt_seconds: 0.02
+  control_hz: 50
+reward_experiment:
+  term: penalty_action_rate
+  statically_derived_base_weight: -0.5
+  operation: base_weight_times_action_rate_multiplier
+normalization:
+  source: checkpoint_running_observation_statistics
+  caution: 不可漏掉或重新初始化后声称是同一策略。
+transfer:
+  status: not_implemented
+  requirement: 第二引擎、关节顺序、坐标系、PD、控制周期与归一化全部核对后才可称 Sim2Sim 完成。

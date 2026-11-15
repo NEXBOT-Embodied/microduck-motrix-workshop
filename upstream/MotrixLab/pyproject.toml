@@ -1,0 +1,151 @@
+[project]
+name = "motrix-lab"
+version = "0.4.0"
+description = "A general-purpose machine learning architecture designed for robot training"
+authors = [{ name = "Motphys", email = "developers@motphys.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "motrixlab==0.4.0",
+    "motrix-deploy==0.4.0",
+    "motrix-deploy-mujoco==0.4.0",
+    "motrix-deploy-motrixsim==0.4.0",
+    "motrix-deploy-tasks==0.4.0",
+    "motrix-env-motrixsim==0.4.0",
+    "motrix-env-mujoco==0.4.0",
+    "motrix-envs==0.4.0",
+    "motrix-rl==0.4.0",
+    "motrix-rl-builtin==0.4.0",
+    "motrix-rl-skrl==0.4.0",
+]
+
+[project.optional-dependencies]
+rslrl = ["motrix-rl-rslrl==0.4.0"]
+skrl-jax = ["motrix-rl-skrl[jax]==0.4.0"]
+unitree = [
+    "motrix-deploy-unitree[native]==0.4.0",
+]
+docs = [
+    "sphinx",
+    "autodocsumm",
+    "pydata-sphinx-theme",
+    "myst-parser",
+    "sphinx-copybutton",
+    "sphinx-subfigure",
+    "sphinxcontrib-video",
+    "sphinx-togglebutton",
+    "sphinx-design",
+    "tensorboard==2.20.0",
+]
+# GPU profiles are owned by the installable RL package. Keep the workspace
+# installation entry points without duplicating versions or index routing.
+cuda = ["motrix-rl[cuda]==0.4.0"]
+# TBB threading layer for numba parallel manager kernels on many-core
+# machines (see motrix-env-core's tbb extra); optional, combines with any
+# GPU profile.
+tbb = [
+    "motrix-env-core[tbb]==0.4.0",
+]
+rocm = ["motrix-rl[rocm]==0.4.0"]
+
+[dependency-groups]
+dev = [
+    "commitizen>=4,<5",
+    "dprint-py>=0.57.0.0",
+    "mypy>=1.15,<2",
+    "pytest>=8.3.3,<8.4.0",
+    "pytest-cov",
+]
+test = [
+    { include-group = "dev" },
+    "hydra-core>=1.3,<1.4",
+    # Keep the existing 3.10 hardware test environment; 3.11 tests omit Unitree.
+    "motrix-deploy-unitree==0.4.0; python_version < '3.11'",
+]
+
+[tool.uv.workspace]
+members = [
+    "motrixlab",
+    "motrix_robots",
+    "motrix_deploy",
+    "motrix_deploy_mujoco",
+    "motrix_deploy_motrixsim",
+    "motrix_deploy_unitree",
+    "motrix_unitree_native",
+    "motrix_deploy_tasks",
+    "motrix_env_core",
+    "motrix_env_motrixsim",
+    "motrix_env_mujoco",
+    "motrix_envs",
+    "motrix_rl",
+    "motrix_rl_builtin",
+    "motrix_rl_skrl",
+    "motrix_rl_rslrl",
+]
+
+[tool.uv]
+# Resolve macOS separately so GPU-extra forks retain the PyPI Torch fallback.
+environments = ["sys_platform == 'darwin'", "sys_platform != 'darwin'"]
+package = false
+prerelease = "if-necessary-or-explicit"
+constraint-dependencies = ["motrixsim-core===0.10.2.dev132873"]
+# The forwarding extras are mutually exclusive. uv also collects motrix-rl's
+# member-local conflicts when resolving this workspace.
+conflicts = [[{ extra = "cuda" }, { extra = "rocm" }]]
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+
+# Development builds are published separately from public PyPI. Restrict this
+# index to MotrixSim so unrelated dependencies retain their existing sources.
+[[tool.uv.index]]
+name = "motphys"
+url = "https://pypi.motphys.com/simple"
+explicit = true
+
+[tool.uv.sources]
+motrixsim = { index = "motphys" }
+motrixsim-core = { index = "motphys" }
+motrixlab = { workspace = true }
+motrix-robots = { workspace = true }
+motrix-env-core = { workspace = true }
+motrix-deploy = { workspace = true }
+motrix-deploy-mujoco = { workspace = true }
+motrix-deploy-motrixsim = { workspace = true }
+motrix-deploy-unitree = { workspace = true }
+motrix-unitree-native = { workspace = true }
+motrix-deploy-tasks = { workspace = true }
+motrix-env-motrixsim = { workspace = true }
+motrix-env-mujoco = { workspace = true }
+motrix-envs = { workspace = true }
+motrix-rl = { workspace = true }
+motrix-rl-builtin = { workspace = true }
+motrix-rl-skrl = { workspace = true }
+motrix-rl-rslrl = { workspace = true }
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_provider = "uv"
+version_scheme = "pep440"
+tag_format = "v$version"
+version_files = [
+    'pyproject.toml:"(?:motrix-[a-z0-9-]+|motrixlab)(?:\[[^"\]]+\])?==',
+    '*/pyproject.toml:^version = |"(?:motrix-[a-z0-9-]+|motrixlab)(?:\[[^"\]]+\])?==',
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: tests with substantial compilation or runtime cost",
+    "numba: dedicated Numba kernel regression tests",
+    "integration: full-environment or subprocess integration tests",
+]
+
+[tool.mypy]
+files = [
+    "motrix_env_core/tests/typecheck/configclass.py",
+    "motrix_env_core/tests/typecheck/numba_env.py",
+]
+mypy_path = "motrix_env_core/src"
+python_version = "3.10"
+strict = true
+warn_unused_ignores = true

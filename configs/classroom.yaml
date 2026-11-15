@@ -1,0 +1,49 @@
+# 教师配置；课程现场不让学生修改算法拓扑和资源参数。
+course:
+  title: 上海张江谋先飞 12 月 6 日小鸭子教学
+  task: microduck-course-flat
+  base_task: microduck-walk-flat
+  simulator: motrixsim
+  algorithm: motrix.fastsac
+  upstream_commit: 1ddb9743c220c3a1e234ea0237d5ce9cc56d0499
+  upstream_path: upstream/MotrixLab
+
+runtime:
+  seed: 42
+  num_envs: 32
+  play_num_envs: 1
+  additional_iterations: 200
+  device: auto
+  cpu_threads: 2
+  logging_interval: 20
+  checkpoint_interval: 100
+  # 这些只是试配起点，尚未在 RoboGo/算力自由完成单人或 50 人压测。
+  capacity_status: unverified
+
+fastsac:
+  # 保留官方网络结构，避免与教师起步 checkpoint 形状不一致。
+  asynchronous: false
+  agent:
+    compile: false
+    amp: false
+    buffer_size: 256
+    batch_size: 256
+    num_updates: 1
+
+evaluation:
+  # 仅在 baseline/play 生效；训练仍使用官方随机命令分布。
+  preset: forward_walk_trial
+  command: [0.15, 0.0, 0.0]  # vx(m/s), vy(m/s), wz(rad/s)
+  seed: 42
+  status: unverified_trial_not_walking_acceptance
+  # 固定命令不等于速度跟踪达标；本版不自动计算速度误差/跌倒率。
+
+paths:
+  policies: configs/policies.yaml
+  outputs: outputs/training_outputs
+  submissions: submissions
+
+acceptance:
+  walking_policy_status: not_yet_trained
+  image_status: preparation_only
+  sim2sim_status: second_engine_not_selected
