@@ -155,7 +155,7 @@ def state_for(name: str, policy: Path) -> dict:
     return state
 
 
-def check(*, brief: bool = False) -> int:
+def check(*, brief: bool = False, allow_cpu: bool = False) -> int:
     from microduck_course.runtime import RUNTIME_MODULES, add_upstream_sources
     results = {}
     settings = None
@@ -192,19 +192,25 @@ def check(*, brief: bool = False) -> int:
         versions["motrixsim"] = "distribution version unavailable"
     if versions["cuda_available"]:
         versions["gpu"] = torch.cuda.get_device_name(0)
-    else:
+    elif not allow_cpu:
         failed = True  # The bound training settings explicitly use CUDA.
     report = {"status": "failed" if failed else "local_files_and_dependencies_verified",
           "root": str(ROOT), "python": sys.executable, "prepared_python": str(PYTHON),
           "versions": versions, "dependencies_discoverable": dependencies, "cases": results,
           "module_origins": module_origins, "source_runs": str(SOURCE_RUNS),
           "training_outputs": str(TRAIN_OUTPUTS),
+          "cuda_required": not allow_cpu,
           "simulation_executed": False, "training_executed": False, "window_verified": False,
           "walking_verified": False, "scope": "本检查不创建仿真环境，不替代窗口与行走实测"}
     if brief:
         report_path = PLAY_OUTPUTS / "environment_check.json"
         write_json(report_path, report)
-        print("检查未通过，请先处理下列问题。" if failed else "环境检查通过，可以运行小鸭子。", flush=True)
+        if failed:
+            print("检查未通过，请先处理下列问题。", flush=True)
+        elif versions["cuda_available"]:
+            print("环境检查通过，可以运行小鸭子。", flush=True)
+        else:
+            print("CPU 环境和权重检查通过。已固定的课堂续训配置仍需要 CUDA。", flush=True)
         print(f"使用的 Python：{sys.executable}")
         print(f"训练显卡：{versions.get('gpu', 'CUDA 不可用')}")
         for name, result in results.items():
@@ -432,6 +438,7 @@ def parser() -> argparse.ArgumentParser:
     commands = p.add_subparsers(dest="command", required=True)
     checking = commands.add_parser("check", help="只读核对固定权重、完整训练状态、依赖与CUDA；不创建仿真")
     checking.add_argument("--brief", action="store_true", help="显示简洁中文结论，并保存完整检查报告")
+    checking.add_argument("--allow-cpu", action="store_true", help="无 CUDA 时仍检查依赖和权重，供 CPU 环境验证")
     playback = commands.add_parser("play", help="默认打开真实交互窗口，关闭窗口结束")
     playback.add_argument("--case", required=True, choices=tuple(CASES))
     playback.add_argument("--record", action="store_true", help="改为真实离屏录像；不会打开交互窗口")
@@ -457,7 +464,7 @@ def main() -> int:
     args = parser().parse_args()
     try:
         if args.command == "check":
-            return check(brief=args.brief)
+            return check(brief=args.brief, allow_cpu=args.allow_cpu)
         if args.command == "play-trained":
             return play_trained(args)
         return play(args) if args.command == "play" else train(args)

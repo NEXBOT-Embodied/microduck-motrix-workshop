@@ -56,17 +56,19 @@ notepad .\configs\walking_constraints.yaml
 
 ## 课前环境准备
 
-需要 Windows、Git for Windows 和 NVIDIA CUDA 运行条件。仓库不包含 Python 虚拟环境。固定版上游提供安装入口，在工程根目录运行：
+支持按 Windows x64 或 Ubuntu x86_64 路线准备环境。先准备 Git，再在工程根目录执行课程安装入口。已有 uv 和 Python 3.12 可直接复用，缺失时脚本会下载并校验。NVIDIA CUDA 可用时选 `cuda`，普通虚拟机选 `cpu`。
 
 ```powershell
-Push-Location .\upstream\MotrixLab
-.\install.ps1 --python 3.12 --gpu cuda
-Pop-Location
-uv pip install --python .\upstream\MotrixLab\.venv\Scripts\python.exe -e .
-.\tools\lesson.cmd check --brief
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\install_course.ps1 -Backend cpu
+.\tools\lesson.cmd check --brief --allow-cpu
 ```
 
-安装只在课前进行。若已有可用环境，可把 `COURSE_PYTHON` 指向该环境的 Python；否则入口按本工程 `.venv`、`upstream/MotrixLab/.venv` 的顺序查找。依赖版本参考 `environment/requirements-observed.txt`，它是本次运行环境的版本记录。
+```bash
+bash tools/install_course.sh --backend cpu
+bash tools/lesson.sh check --brief --allow-cpu
+```
+
+安装只在课前进行。课堂续训需要 CUDA，安装时改选 `cuda`，验收时去掉 `--allow-cpu`。Ubuntu 使用 `bash tools/lesson.sh`，其余课堂子命令与 PowerShell 示例相同。安装和验证细节见[国内源安装与验证](docs/国内源安装与验证.md)及[虚拟机 Codex 验证提示词](docs/虚拟机Codex验证提示词.md)。
 
 ## 第一版状态与来源
 

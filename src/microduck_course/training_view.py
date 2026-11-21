@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import json
 import math
+import os
 import re
 import subprocess
 import time
@@ -19,6 +20,22 @@ from microduck_course.storage import sha256, write_json
 
 
 LABEL = "真实训练视图 · 含探索动作 · 非 deterministic 评估"
+
+
+def recording_text(font_size):
+    from PIL import ImageFont
+
+    candidates = (
+        Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts/msyh.ttc",
+        Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
+    )
+    for path in candidates:
+        try:
+            return ImageFont.truetype(str(path), font_size), LABEL, "本次采样循环 {step} | 可视化环境 0"
+        except OSError:
+            continue
+    return (ImageFont.load_default(size=font_size), "Live training | Includes exploration",
+            "Collector step {step} | Environment 0")
 
 
 def utc_now() -> str:
@@ -134,7 +151,7 @@ class TrainingView:
 
     def _capture(self, step_result):
         import imageio.v2 as imageio
-        from PIL import Image, ImageDraw, ImageFont
+        from PIL import Image, ImageDraw
         if self.offscreen is None:
             self._create_offscreen()
         frame = self.offscreen.capture()
@@ -146,13 +163,13 @@ class TrainingView:
         canvas.paste(Image.fromarray(frame), (0, 64))
         draw = ImageDraw.Draw(canvas)
         font_size = 20
-        font = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", font_size)
-        while font_size > 8 and draw.textbbox((0, 0), LABEL, font=font)[2] > width - 24:
+        font, title, caption = recording_text(font_size)
+        while font_size > 8 and draw.textbbox((0, 0), title, font=font)[2] > width - 24:
             font_size -= 1
-            font = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", font_size)
-        draw.text((12, 5), LABEL, font=font, fill="#e6ebf1")
+            font, title, caption = recording_text(font_size)
+        draw.text((12, 5), title, font=font, fill="#e6ebf1")
         global_index = self.initial_step + self.local_steps - 1
-        draw.text((12, 33), f"本次采样循环 {self.local_steps} | 可视化环境 0",
+        draw.text((12, 33), caption.format(step=self.local_steps),
                   font=font, fill="#a4afbd")
         if self.writer is None:
             self.writer = imageio.get_writer(self.clip["path"], fps=self.options["record_fps"],
