@@ -9,9 +9,9 @@
 ## 构建顺序
 
 1. 供应方确认镜像格式（整机模板、Docker 还是平台环境快照）、GPU 型号/驱动、系统、远程桌面、学员目录隔离和持久盘。
-2. 教师在测试实例准备 `uv` 和所需系统图形运行库；不要让学员在活动现场安装。
-3. 先查阅 `upstream/MotrixLab/install.sh` 和 `uv.lock`；使用平台匹配的 GPU 参数执行官方安装。Linux NVIDIA 参考命令是 `sh install.sh --python 3.12 --gpu cuda`。该步骤需要网络及真实 SDK 软件包可访问性。
-4. 用上游 `.venv/bin/python` 安装本课程包。`prepare_linux.sh --apply` 将上述两步串联，尚未在真实云实例执行。
+2. 教师在测试实例准备所需图形运行库和 NVIDIA 驱动。
+3. 在工程根目录运行 `sh image/prepare_linux.sh --apply`。它调用课程安装器，以 CUDA 12.8 配置安装固定版 MotrixLab 和课程包，并导出依赖版本。依赖下载需要网络和可访问的 MotrixSim SDK 源。
+4. 核对脚本保存的 `image/runtime-freeze.txt`。
 5. 运行 `check --runtime`，再做官方/本课程训练及 MotrixSim 窗口和离屏录制验收。
 6. 实际训练并观看 reference、starter，填写 `configs/policies.yaml`。两项当前均缺失，构建脚本不会生成假权重。
 7. 冷启动复制 2 份学员实例，逐项验证文件写入、策略保存、端口和桌面相互隔离；之后按验收计划逐级升至 50 人真实并行训练。

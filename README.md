@@ -14,7 +14,7 @@
 
 ## 环境检查与策略回放
 
-在已完成课前环境准备的电脑上，从工程根目录打开 PowerShell，依次执行：
+在已完成课前环境准备的电脑上，从工程根目录执行。以下示例使用 Windows PowerShell。在 macOS 或 Linux 上，将每条命令开头的 `.\tools\lesson.cmd` 换成 `sh tools/lesson.sh`，参数相同。
 
 ```powershell
 .\tools\lesson.cmd check --brief
@@ -26,9 +26,7 @@
 
 ## 奖励参数对照实验
 
-```powershell
-notepad .\configs\walking_constraints.yaml
-```
+用文本编辑器打开 `configs/walking_constraints.yaml`。
 
 修改字段为 `task.rewards.penalty_heading_rate.weight`。A 组保留 `-20.0`，B 组改为 `-25.0`，其余参数保持一致。每组依次执行：
 
@@ -56,17 +54,26 @@ notepad .\configs\walking_constraints.yaml
 
 ## 课前环境准备
 
-需要 Windows、Git for Windows 和 NVIDIA CUDA 运行条件。仓库不包含 Python 虚拟环境。固定版上游提供安装入口，在工程根目录运行：
+从工程根目录运行。安装器使用 Python 3.12 和仓库内固定版 MotrixLab 的依赖锁，在 `upstream/MotrixLab/.venv` 中安装课程环境。
 
-```powershell
-Push-Location .\upstream\MotrixLab
-.\install.ps1 --python 3.12 --gpu cuda
-Pop-Location
-uv pip install --python .\upstream\MotrixLab\.venv\Scripts\python.exe -e .
-.\tools\lesson.cmd check --brief
+| 平台 | 安装命令 | 默认 PyTorch |
+| --- | --- | --- |
+| Windows x86_64（需 Git for Windows） | `powershell -ExecutionPolicy Bypass -File .\install.ps1` | CUDA 12.8 |
+| macOS Apple Silicon（原生 arm64 终端） | `sh install.sh` | macOS 原生构建 |
+| Linux x86_64（glibc 2.28 或更新） | `sh install.sh` | 检测到可用 NVIDIA 驱动时选 CUDA 12.8，其余情况选 PyPI 默认构建 |
+
+Linux 可用 `sh install.sh --gpu cuda` 显式选择 CUDA。Windows 和 Linux 可用 `--gpu default` 选择 PyPI 默认构建。Linux 上该构建包含随 PyTorch 分发的 CUDA 库，也可在 CPU 上运行。课堂续训按 CUDA、MPS、CPU 的顺序选用可用设备。固定版 MotrixSim SDK 的平台范围见上表。
+
+安装器优先使用中科大 uv 镜像、南京大学 Python 和 CUDA wheel 镜像、阿里云 PyPI 镜像，MotrixSim SDK 从 Motphys 自有源下载。国内镜像失败时会用官方源重试，也可加 `--official` 直接使用官方源。
+
+安装结束后会运行课堂环境检查。macOS 和 Linux 可以用以下命令重复检查和回放。
+
+```sh
+sh tools/lesson.sh check --brief
+sh tools/lesson.sh play --case drift
 ```
 
-安装只在课前进行。若已有可用环境，可把 `COURSE_PYTHON` 指向该环境的 Python；否则入口按本工程 `.venv`、`upstream/MotrixLab/.venv` 的顺序查找。依赖版本参考 `environment/requirements-observed.txt`，它是本次运行环境的版本记录。
+原生回放窗口需要图形桌面和可用的图形驱动，Linux 还需要 Vulkan 运行库。若已有可用环境，可把 `COURSE_PYTHON` 指向该环境的 Python。否则课堂入口按本工程 `.venv`、`upstream/MotrixLab/.venv` 的顺序查找。安装只在课前进行。
 
 ## 第一版状态与来源
 

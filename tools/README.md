@@ -1,6 +1,6 @@
 # 课堂入口
 
-在工程根目录的 PowerShell 中使用 `tools/lesson.cmd`，完整步骤见根目录 README。
+在工程根目录运行。Windows 使用 `.\tools\lesson.cmd`，macOS 和 Linux 使用 `sh tools/lesson.sh`，完整步骤见根目录 README。
 
 - `local_tutorial.py`：检查固定案例、运行回放、读取 YAML、训练和选择新结果。
 - `evaluate_walking.py`：对指定策略做行走评估。

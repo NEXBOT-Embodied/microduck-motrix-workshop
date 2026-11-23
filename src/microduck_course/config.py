@@ -115,8 +115,8 @@ def load_settings(root: Path, classroom: str, experiment: str) -> dict:
     seed = runtime["seed"]
     if isinstance(seed, bool) or not isinstance(seed, int) or seed < 0:
         raise CourseError("runtime.seed 必须是非负整数。")
-    if not re.fullmatch(r"auto|cpu|cuda(?::\d+)?", runtime["device"]):
-        raise CourseError("runtime.device 仅支持 auto、cpu、cuda 或 cuda:N。")
+    if not re.fullmatch(r"auto|cpu|mps|cuda(?::\d+)?", runtime["device"]):
+        raise CourseError("runtime.device 仅支持 auto、cpu、mps、cuda 或 cuda:N。")
     if teacher["fastsac"]["asynchronous"] is not False:
         raise CourseError("课程第一版固定同步 FastSAC，尚未验收异步课堂路径。")
     evaluation = teacher["evaluation"]

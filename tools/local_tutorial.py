@@ -155,6 +155,12 @@ def state_for(name: str, policy: Path) -> dict:
     return state
 
 
+def training_device() -> str:
+    from motrix_rl.device import resolve_default_device
+
+    return str(resolve_default_device())
+
+
 def check(*, brief: bool = False) -> int:
     from microduck_course.runtime import RUNTIME_MODULES, add_upstream_sources
     results = {}
@@ -192,8 +198,7 @@ def check(*, brief: bool = False) -> int:
         versions["motrixsim"] = "distribution version unavailable"
     if versions["cuda_available"]:
         versions["gpu"] = torch.cuda.get_device_name(0)
-    else:
-        failed = True  # The bound training settings explicitly use CUDA.
+    versions["training_device"] = training_device() if dependencies.get("motrix_rl") else None
     report = {"status": "failed" if failed else "local_files_and_dependencies_verified",
           "root": str(ROOT), "python": sys.executable, "prepared_python": str(PYTHON),
           "versions": versions, "dependencies_discoverable": dependencies, "cases": results,
@@ -206,7 +211,7 @@ def check(*, brief: bool = False) -> int:
         write_json(report_path, report)
         print("检查未通过，请先处理下列问题。" if failed else "环境检查通过，可以运行小鸭子。", flush=True)
         print(f"使用的 Python：{sys.executable}")
-        print(f"训练显卡：{versions.get('gpu', 'CUDA 不可用')}")
+        print(f"训练设备：{versions.get('gpu') or versions['training_device'] or '未检测到'}")
         for name, result in results.items():
             label = "走偏示例" if name == "drift" else "直行候选"
             print(f"{label}：" + ("文件和模型已核对" if result["status"] != "failed" else result["error"]))
@@ -312,19 +317,19 @@ def play(args: argparse.Namespace) -> int:
 
 
 def train(args: argparse.Namespace) -> int:
-    from microduck_course.runtime import actor_update_gates, require_learning_progress, train_real
+    from microduck_course.runtime import actor_update_gates, add_upstream_sources, require_learning_progress, train_real
     saved, run_dir, policy, source_hashes, source_task = bound_case("straight")
     state = state_for("straight", policy)
     settings = portable_settings(saved)
+    add_upstream_sources(ROOT, settings)
+    settings["runtime"]["device"] = training_device()
     settings["runtime"]["additional_iterations"] = args.steps
     settings["teacher_task_profile"] = PROFILES[args.yaw_weight]
     effective_constraints = None
     if args.constraints:
         from microduck_course.constraints import attach_constraints, apply_constraints, constraint_summary
-        from microduck_course.runtime import add_upstream_sources
         from microduck_course.task import apply_teacher_task_profile
         settings = attach_constraints(ROOT, settings, args.constraints)
-        add_upstream_sources(ROOT, settings)
         from motrix_envs.locomotion.humanoid.microduck import make_microduck_walk_flat_cfg
         task = apply_constraints(apply_teacher_task_profile(make_microduck_walk_flat_cfg(), settings["teacher_task_profile"]),
                                  settings["walking_constraints"])
@@ -349,6 +354,7 @@ def train(args: argparse.Namespace) -> int:
         "start": "random_initialization" if args.from_scratch else "fixed_26k_complete_training_state",
         "source_files": source_hashes, "source_agent_matches": True,
         "additional_vector_iterations": args.steps, "num_envs": settings["runtime"]["num_envs"],
+        "training_device": settings["runtime"]["device"],
         "new_environment_transitions": args.steps * settings["runtime"]["num_envs"],
         "initial_global_step": initial_step, "target_global_step": target,
         "initial_update_idx": initial_update,
@@ -405,8 +411,9 @@ def train(args: argparse.Namespace) -> int:
     print(f"训练编号：{manifest['run_id']}")
     print(f"本次新增采样循环：{manifest['final_global_step'] - initial_step}")
     print(f"模型文件：{checkpoint}", flush=True)
+    launcher = [str(ROOT / "tools/lesson.cmd")] if sys.platform == "win32" else ["sh", str(ROOT / "tools/lesson.sh")]
     emit({"new_course_run": str(path), "new_checkpoint": str(checkpoint), **manifest,
-          "play_command": ([str(ROOT / "tools/lesson.cmd"), "play-trained", "--run", manifest["run_id"]]
+          "play_command": ([*launcher, "play-trained", "--run", manifest["run_id"]]
                            if not args.from_scratch else
                            [str(PYTHON), "-m", "microduck_course", "play", "--classroom", "configs/teacher_heading_continue28.yaml",
                             "--student", manifest["student"], "--run", manifest["run_id"]])})
