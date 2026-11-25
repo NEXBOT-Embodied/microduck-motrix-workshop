@@ -75,6 +75,20 @@ sh tools/lesson.sh play --case drift
 
 原生回放窗口需要图形桌面和可用的图形驱动，Linux 还需要 Vulkan 运行库。若已有可用环境，可把 `COURSE_PYTHON` 指向该环境的 Python。否则课堂入口按本工程 `.venv`、`upstream/MotrixLab/.venv` 的顺序查找。安装只在课前进行。
 
+Windows x64 和 Ubuntu x86_64 虚拟机另有显式选择 PyTorch CPU 或 CUDA 构建的入口。以下示例安装 CPU 构建，已有 uv 和 Python 3.12 可复用，缺失时会下载并校验。
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\install_course.ps1 -Backend cpu
+.\tools\lesson.cmd check --brief --allow-cpu
+```
+
+```bash
+bash tools/install_course.sh --backend cpu
+bash tools/lesson.sh check --brief --allow-cpu
+```
+
+验收 NVIDIA 环境时，安装时选 `cuda`，检查时使用 `check --brief --require-cuda`。安装和验证细节见[国内源安装与验证](docs/国内源安装与验证.md)及[虚拟机 Codex 验证提示词](docs/虚拟机Codex验证提示词.md)。
+
 ## 第一版状态与来源
 
 算法为 FastSAC，最终行走画面由 MotrixSim 展示。直行候选的已有严格测试为六次通过五次，课堂实验继续比较方向、迈步和稳定性。第二引擎 Sim2Sim 尚待实测；本课不做 Sim2Real。

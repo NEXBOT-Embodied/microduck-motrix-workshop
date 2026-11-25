@@ -161,7 +161,7 @@ def training_device() -> str:
     return str(resolve_default_device())
 
 
-def check(*, brief: bool = False) -> int:
+def check(*, brief: bool = False, require_cuda: bool = False) -> int:
     from microduck_course.runtime import RUNTIME_MODULES, add_upstream_sources
     results = {}
     settings = None
@@ -198,18 +198,26 @@ def check(*, brief: bool = False) -> int:
         versions["motrixsim"] = "distribution version unavailable"
     if versions["cuda_available"]:
         versions["gpu"] = torch.cuda.get_device_name(0)
+    elif require_cuda:
+        failed = True
     versions["training_device"] = training_device() if dependencies.get("motrix_rl") else None
     report = {"status": "failed" if failed else "local_files_and_dependencies_verified",
           "root": str(ROOT), "python": sys.executable, "prepared_python": str(PYTHON),
           "versions": versions, "dependencies_discoverable": dependencies, "cases": results,
           "module_origins": module_origins, "source_runs": str(SOURCE_RUNS),
           "training_outputs": str(TRAIN_OUTPUTS),
+          "cuda_required": require_cuda,
           "simulation_executed": False, "training_executed": False, "window_verified": False,
           "walking_verified": False, "scope": "本检查不创建仿真环境，不替代窗口与行走实测"}
     if brief:
         report_path = PLAY_OUTPUTS / "environment_check.json"
         write_json(report_path, report)
-        print("检查未通过，请先处理下列问题。" if failed else "环境检查通过，可以运行小鸭子。", flush=True)
+        if failed:
+            print("检查未通过，请先处理下列问题。", flush=True)
+            if require_cuda and not versions["cuda_available"]:
+                print("本次检查要求 CUDA，但当前 Python 未检测到可用 CUDA 设备。", flush=True)
+        else:
+            print("环境检查通过，可以运行小鸭子。", flush=True)
         print(f"使用的 Python：{sys.executable}")
         print(f"训练设备：{versions.get('gpu') or versions['training_device'] or '未检测到'}")
         for name, result in results.items():
@@ -439,6 +447,10 @@ def parser() -> argparse.ArgumentParser:
     commands = p.add_subparsers(dest="command", required=True)
     checking = commands.add_parser("check", help="只读核对固定权重、完整训练状态、依赖与CUDA；不创建仿真")
     checking.add_argument("--brief", action="store_true", help="显示简洁中文结论，并保存完整检查报告")
+    device_checks = checking.add_mutually_exclusive_group()
+    device_checks.add_argument("--allow-cpu", dest="require_cuda", action="store_false", help="按本机可用训练设备检查依赖和权重（默认）")
+    device_checks.add_argument("--require-cuda", action="store_true", help="另外要求当前 Python 能使用 NVIDIA CUDA")
+    checking.set_defaults(require_cuda=False)
     playback = commands.add_parser("play", help="默认打开真实交互窗口，关闭窗口结束")
     playback.add_argument("--case", required=True, choices=tuple(CASES))
     playback.add_argument("--record", action="store_true", help="改为真实离屏录像；不会打开交互窗口")
@@ -464,7 +476,7 @@ def main() -> int:
     args = parser().parse_args()
     try:
         if args.command == "check":
-            return check(brief=args.brief)
+            return check(brief=args.brief, require_cuda=args.require_cuda)
         if args.command == "play-trained":
             return play_trained(args)
         return play(args) if args.command == "play" else train(args)
