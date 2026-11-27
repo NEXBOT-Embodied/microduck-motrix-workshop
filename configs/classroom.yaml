@@ -33,7 +33,7 @@ fastsac:
 evaluation:
   # 仅在 baseline/play 生效；训练仍使用官方随机命令分布。
   preset: forward_walk_trial
-  command: [0.15, 0.0, 0.0]  # vx(m/s), vy(m/s), wz(rad/s)
+  command: [0.20, 0.0, 0.0]  # vx(m/s), vy(m/s), wz(rad/s)；与官网策略演示一致
   seed: 42
   status: unverified_trial_not_walking_acceptance
   # 固定命令不等于速度跟踪达标；本版不自动计算速度误差/跌倒率。

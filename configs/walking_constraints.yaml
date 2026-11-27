@@ -216,7 +216,7 @@ task:
         size: 2
 
 evaluation:
-  command: [0.15, 0.0, 0.0]  # 回放时固定目标：[前进 m/s, 横移 m/s, 转向 rad/s]。
+  command: [0.20, 0.0, 0.0]  # 回放时固定目标：[前进 m/s, 横移 m/s, 转向 rad/s]，与官网策略演示一致。
   # 这一项不改变训练时抽取目标的范围；训练范围请改 task.commands.walk.vel_limit。
 
 # 模型硬限制（只读参考，不从这里覆盖）
